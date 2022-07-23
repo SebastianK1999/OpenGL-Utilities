@@ -3,14 +3,14 @@
 file(GLOB_RECURSE GLM_FILES_HPP "${CMAKE_CURRENT_SOURCE_DIR}/glm/glm/*.hpp") 
 file(GLOB_RECURSE GLM_FILES_CPP "${CMAKE_CURRENT_SOURCE_DIR}/glm/glm/*.cpp")
 add_library(
-    GLM_LIB 
+    glm 
     STATIC 
     ${GLM_FILES_HPP}
     ${GLM_FILES_CPP}
 )
-set_target_properties(GLM_LIB PROPERTIES LINKER_LANGUAGE CXX)
-target_include_directories(GLM_LIB PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/glm/")
-target_link_libraries(GLM_LIB PUBLIC ${CORE_LIBS})
+set_target_properties(glm PROPERTIES LINKER_LANGUAGE CXX)
+target_include_directories(glm PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/glm/")
+target_link_libraries(glm PUBLIC ${CORE_LIBS})
 
 
 # glfw
@@ -44,7 +44,7 @@ file(GLOB_RECURSE LIBEPOXY_FILES_H "${CMAKE_CURRENT_SOURCE_DIR}/libepoxy/src/*.h
 file(GLOB_RECURSE LIBEPOXY_FILES_C "${CMAKE_CURRENT_SOURCE_DIR}/libepoxy/src/*.c")
 file(GLOB_RECURSE LIBEPOXY_INCLUDE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/libepoxy/include/*.h")
 add_library(
-    LIBEPOXY_LIB 
+    libepoxy 
     STATIC 
     ${LIBEPOXY_FILES_H}
     ${LIBEPOXY_FILES_CPP}
@@ -59,6 +59,6 @@ foreach (LIBEPOXY_REGISTRY ${LIBEPOXY_REGISTRY_FILES})
   )
 endforeach()
 
-set_target_properties(LIBEPOXY_LIB PROPERTIES LINKER_LANGUAGE C)
-target_include_directories(LIBEPOXY_LIB PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/libepoxy/include/")
-target_link_libraries(LIBEPOXY_LIB PUBLIC ${CORE_LIBS} LIBEPOXY_CONFIG_LIB GLM_LIB glfw)
+set_target_properties(libepoxy PROPERTIES LINKER_LANGUAGE C)
+target_include_directories(libepoxy PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/libepoxy/include/")
+target_link_libraries(libepoxy PUBLIC ${CORE_LIBS} LIBEPOXY_CONFIG_LIB glm glfw)

@@ -32,11 +32,11 @@ file(GLOB_RECURSE GLEW_FILES_CPP "${CMAKE_CURRENT_LIST_DIR}/glew/src/*.c")
 file(GLOB_RECURSE GLEW_FILES_HPP "${CMAKE_CURRENT_LIST_DIR}/glew/include/GL/*.h")
 
 add_library(
-    GLEW_LIB
+    GLEW
     STATIC
     ${GLEW_FILES_HPP}
     ${GLEW_FILES_CPP}
 )
-target_include_directories(GLEW_LIB PUBLIC "${CMAKE_CURRENT_LIST_DIR}/glew/include/")
-target_link_libraries(GLEW_LIB PUBLIC ${CORE_LIBS} GLM_LIB LIBEPOXY_LIB glfw)
+target_include_directories(GLEW PUBLIC "${CMAKE_CURRENT_LIST_DIR}/glew/include/")
+target_link_libraries(GLEW PUBLIC ${CORE_LIBS} glm libepoxy glfw)
 
