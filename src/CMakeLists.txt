@@ -79,13 +79,13 @@ file(GLOB_RECURSE OGL_UTIL_FILES_HPP "${CMAKE_CURRENT_LIST_DIR}/*.hpp")
 file(GLOB_RECURSE OGL_UTIL_INCLUDE_FILES "${CMAKE_CURRENT_LIST_DIR}/../include/*.hpp")
 
 add_library(
-    OGL_UTIL_LIB
+    oglu
     STATIC
     ${OGL_UTIL_FILES_HPP}
     ${OGL_UTIL_FILES_CPP}
 )
-target_include_directories(OGL_UTIL_LIB PUBLIC "${CMAKE_CURRENT_LIST_DIR}/../include/")
-target_link_libraries(OGL_UTIL_LIB PUBLIC ${CORE_LIBS} GLM_LIB LIBEPOXY_LIB glfw)
+target_include_directories(oglu PUBLIC "${CMAKE_CURRENT_LIST_DIR}/../include/")
+target_link_libraries(oglu PUBLIC ${CORE_LIBS} GLM_LIB LIBEPOXY_LIB glfw GLEW_LIB)
 
 
 

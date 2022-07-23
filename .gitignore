@@ -45,6 +45,7 @@ CTestTestfile.cmake
 _deps
 
 # other
+external/*/
 build/
 vsbuild/
 wbuild/
