@@ -10,3 +10,11 @@
 	path = submodules/libepoxy
 	url = https://github.com/anholt/libepoxy.git
 	branch = master
+[submodule "build/submodules/whereami"]
+	path = build/submodules/whereami
+	url = https://github.com/gpakosz/whereami.git
+	branch = master
+[submodule "submodules/whereami"]
+	path = submodules/whereami
+	url = https://github.com/gpakosz/whereami.git
+	branch = master
