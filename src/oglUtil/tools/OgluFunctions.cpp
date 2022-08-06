@@ -76,7 +76,7 @@ void oglu::printErrorsDbg(const std::string& comment){
 #ifdef DEBUG
    GLenum errorCode;
    while ( (errorCode=glGetError()) ){
-		std::cout << "(Dbg) OpenGL ERROR: 0x" << std::hex << errorCode << " : " << comment << ";" << "\n";
+		std::cout << "(Dbg) OpenGL ERROR: 0x" << std::setfill('0') << std::setw(4) << std::right << std::hex << errorCode << " : " << comment << ";" << "\n";
    }
 #endif
 }

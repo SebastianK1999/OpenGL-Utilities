@@ -41,6 +41,9 @@
 #include "oglUtil_OLD/SpheresInstances.hpp"
 #include "oglUtil_OLD/Sphere.hpp"
 
+#include "whereami.h"
+
+
 
 /*
 * Because of unknown reasons, these can not be a member of MainWindow Class
@@ -210,6 +213,13 @@ void MainWindow::colisions(){
 
 
 int main(int argc, char *argv[]) {
+    int dirname_length;
+    int length = wai_getExecutablePath(NULL, 0, NULL);
+    std::vector<char> path(length+1);
+    wai_getExecutablePath(path.data() , length, &dirname_length);
+    path.data()[length] = '\0';
+    std::cout << path.data() << "\n";
+
     oglu::setupOglu();
     oglu::setupGlfw();
     MainWindow window(800, 800, "Bubbles");
