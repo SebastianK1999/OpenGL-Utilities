@@ -25,7 +25,7 @@
 #include "oglUtil/tools/KeyTracker.hpp"
 #include <algorithm>
 
-
+// TODO - glfwGetTime() instead of std::chrono whitch does not work on Windows
 oglu::KeyTracker::KeyData::KeyData(const KeyData& other) noexcept:
     key(other.key),
     state(other.state),
@@ -163,7 +163,7 @@ void oglu::KeyTracker::removeKey(const KeyBundle& keyBundle){
     }
 }
 
-int oglu::KeyTracker::getState(const int key) const {
+oglu::EKeyState oglu::KeyTracker::getState(const int key) const {
     std::vector<KeyData>::const_iterator keyIterator = std::find_if(trackedKeys.begin(), trackedKeys.end(), [&key](const KeyData& ki){return (ki.key == key);});
     if(keyIterator != trackedKeys.end()){
         return keyIterator->state;
@@ -171,7 +171,7 @@ int oglu::KeyTracker::getState(const int key) const {
     return EKeyState_undefined;
 }
 
-int oglu::KeyTracker::getState(const KeyBundle& keyBundle) const {
+oglu::EKeyState oglu::KeyTracker::getState(const KeyBundle& keyBundle) const {
     int released_count = 0;
     int jPressed_count = 0;
     int pressed_count = 0;
@@ -208,11 +208,13 @@ int oglu::KeyTracker::getState(const KeyBundle& keyBundle) const {
 }
 
 bool oglu::KeyTracker::isReleased(const int key) const {
-    return getState(key) == EKeyState_relesed;
+    EKeyState state = getState(key);
+    return state == EKeyState_relesed || state == EKeyState_isJustRelesed ;
 }
 
 bool oglu::KeyTracker::isReleased(const KeyBundle& keyBundle) const {
-    return getState(keyBundle) == EKeyState_relesed;
+    EKeyState state = getState(keyBundle);
+    return state == EKeyState_relesed || state == EKeyState_isJustRelesed ;
     
 }
 
@@ -227,12 +229,14 @@ bool oglu::KeyTracker::isJustPressed(const KeyBundle& keyBundle) const {
 }
 
 bool oglu::KeyTracker::isPressed(const int key) const {
-    return getState(key) == EKeyState_pressed;
+    EKeyState state = getState(key);
+    return state == EKeyState_pressed || state == EKeyState_isJustPressed;
     
 }
 
 bool oglu::KeyTracker::isPressed(const KeyBundle& keyBundle) const {
-    return getState(keyBundle) == EKeyState_pressed;
+    EKeyState state = getState(keyBundle);
+    return state == EKeyState_pressed || state == EKeyState_isJustPressed;
     
 }
 

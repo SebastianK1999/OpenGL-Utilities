@@ -58,6 +58,7 @@ namespace oglu
         virtual void mainFunction();
         virtual void drawFunction();
         virtual void resize(const int width, const int height);
+        virtual void afterResize(const int width, const int height);
 		virtual void keyCallback(const int key, const int scancode, const int action, const int mods );
 		virtual void mousePosCallback(const double x, const double y );
 		virtual void mouseButtonCallback(const int button, const int action,const int mods );

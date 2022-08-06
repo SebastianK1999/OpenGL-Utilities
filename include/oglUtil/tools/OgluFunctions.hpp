@@ -32,7 +32,7 @@ namespace oglu
 {
     bool setupOglu();
     bool setupGlfw();
-    bool setupGlew(const bool experimental);
+    bool setupGlew(const bool experimental = false);
     void printErrors(const std::string& comment);
     void printErrorsDbg(const std::string& comment);
     void logErrors(const std::string& file_path, const std::string& comment);

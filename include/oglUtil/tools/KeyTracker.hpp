@@ -80,8 +80,8 @@ namespace oglu
         std::vector<bool> hasKey(const KeyBundle& keyBundle) const;
         void removeKey(const int key);
         void removeKey(const KeyBundle& keyBundle);
-        int getState(const int key) const;
-        int getState(const KeyBundle& keyBundle) const;
+        EKeyState getState(const int key) const;
+        EKeyState getState(const KeyBundle& keyBundle) const;
         bool isReleased(const int key) const;
         bool isReleased(const KeyBundle& keyBundle) const;
         bool isJustPressed(const int key) const;

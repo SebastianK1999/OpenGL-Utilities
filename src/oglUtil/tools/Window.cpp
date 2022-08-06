@@ -85,14 +85,13 @@ oglu::Window::Window(const int width, const int height, const std::string& name,
     glfwSetScrollCallback(glfwWindowPtr, oglu::callbackScroll );
 
     glfwGetWindowPos(  glfwWindowPtr, &windowedModePosition[0],  &windowedModePosition[1] );
-    // Resize() begining:
-    // Ensure we can capture the escape key being pressed below
-    //glfwSetInputMode(glfwWindowPtr, GLFW_STICKY_KEYS, GL_TRUE);
     glfwSwapInterval(1);  // 60 fps ?
     glEnable(GL_MULTISAMPLE);
 
     glfwSetInputMode(getGLFWwindowPtr(), GLFW_STICKY_KEYS, GL_TRUE);
 	glClearColor(0.4f, 0.0f, 0.0f, 0.0f);
+    
+    oglu::setupGlew(false);
 }
 
 oglu::Window::Window()
@@ -175,9 +174,13 @@ void oglu::Window::resize(const int width, const int height){
     int vwd;
     int vht;
     glfwGetFramebufferSize(glfwWindowPtr, &vwd, &vht);
-    //glfwGetWindowSize(glfwWindowPtr, &vwd, &vht );
     glViewport(0,0,vwd,vht);
-    //glScissor(0,0,vwd,vht);
+    glScissor(0,0,vwd,vht);
+    afterResize(vwd, vht);
+}
+
+void oglu::Window::afterResize(const int width, const int height){
+
 }
 
 void oglu::Window::keyCallback(const int key, const int scancode, const int  action, const int mods ){

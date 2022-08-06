@@ -36,6 +36,16 @@ namespace oglu
         glm::vec4 position;
         glm::vec4 scale;
         glm::vec4 rotation;
+
+        Drawable(const Drawable& other) noexcept;
+        Drawable(Drawable&& other) noexcept;
+        Drawable& operator=(const Drawable& other) noexcept;
+        Drawable& operator=(Drawable&& other) noexcept;
+        virtual ~Drawable();
+        Drawable();
+        //virtual void draw();
+
+
     
     private:
 

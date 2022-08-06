@@ -24,3 +24,42 @@
 
 
 #include "oglUtil/drawables/Drawable.hpp"
+#include <utility>
+
+oglu::Drawable::Drawable(const Drawable& other) noexcept 
+: position(other.position)
+, scale(other.scale)
+, rotation(other.rotation)
+{}
+
+oglu::Drawable::Drawable(Drawable&& other) noexcept 
+: position(std::move(other.position))
+, scale(std::move(other.scale))
+, rotation(std::move(other.rotation))
+{}
+
+oglu::Drawable& oglu::Drawable::operator=(const Drawable& other) noexcept {
+    position = other.position;
+    scale = other.scale;
+    rotation = other.rotation;
+    return *this;
+}
+
+oglu::Drawable& oglu::Drawable::operator=(Drawable&& other) noexcept {
+    if (this != &other) {
+        position = std::move(other.position);
+        scale = std::move(other.scale);
+        rotation = std::move(other.rotation);
+    }
+    return *this;
+}
+
+oglu::Drawable::~Drawable() {
+
+}
+
+oglu::Drawable::Drawable()
+: position(0,0,0,0)
+, scale(1,1,1,1)
+, rotation(0,0,0,0)
+{}

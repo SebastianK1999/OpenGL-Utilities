@@ -118,10 +118,8 @@ void MainWindow::mainFunction(){
     if (keyTracker.isJustPressed(GLFW_KEY_TAB)){
         vievMainCamera = !vievMainCamera;
     } 
-
     moveOjects();
     colisions();
-
 }
 
 void MainWindow::drawFunction(){

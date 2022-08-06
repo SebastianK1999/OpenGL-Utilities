@@ -26,6 +26,7 @@
 #pragma once
 
 // Include all utilities
+ #include <oglUtil/tools/Camera.hpp> 
  #include <oglUtil/tools/KeyTracker.hpp> 
  #include <oglUtil/tools/MouseTracker.hpp> 
  #include <oglUtil/tools/OgluFunctions.hpp> 
