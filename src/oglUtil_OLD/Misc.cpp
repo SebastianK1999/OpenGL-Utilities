@@ -8,7 +8,7 @@ Misc::rand::rand():
     disAllInt(INT_MIN,INT_MAX),
     disMaxInt(0,INT_MAX),
     disBinary(0,1),
-    disZeroOnedouble(0.0,1.0)
+    disZeroOneDouble(0.0,1.0)
 {}
 
 Misc::rand& Misc::rand::get(){ return Misc::rand::staticRand; }
@@ -42,10 +42,10 @@ int Misc::rand::randInt(int n,int N){
 
 // rand double
 double Misc::rand::Decim(){
-    return this->disZeroOnedouble(this->generator);
+    return this->disZeroOneDouble(this->generator);
 }
 double Misc::rand::Decim(double n, double N){
-    return this->disZeroOnedouble(this->generator) * (N-n) + n;
+    return this->disZeroOneDouble(this->generator) * (N-n) + n;
 }
 double Misc::rand::Decim(double N){
     return this->Decim(0,N);

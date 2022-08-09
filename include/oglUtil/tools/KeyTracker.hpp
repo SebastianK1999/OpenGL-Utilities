@@ -37,10 +37,10 @@ namespace oglu
     enum EKeyState
     {
         EKeyState_undefined = 0,
-        EKeyState_relesed,
+        EKeyState_released,
         EKeyState_isJustPressed,
         EKeyState_pressed,
-        EKeyState_isJustRelesed,
+        EKeyState_isJustReleased,
     };
 
 

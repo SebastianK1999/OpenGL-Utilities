@@ -127,10 +127,10 @@ oglu::Camera::Camera(GLFWwindow* window)
 , basicModelMatrix(1)
 , MVP(1)
 {
-    int xsize;
-    int ysize;
-    glfwGetFramebufferSize(window, &xsize, &ysize);
-    aspect = (float)xsize/ysize;
+    int xSize;
+    int ySize;
+    glfwGetFramebufferSize(window, &xSize, &ySize);
+    aspect = (float)xSize/ySize;
     updateDirections();
 }
 
@@ -152,10 +152,10 @@ void oglu::Camera::moveToPosition(const glm::vec3& point){
 }
 
 void oglu::Camera::computeMatrices(){
-    int xsize;
-    int ysize;
-    glfwGetFramebufferSize(window, &xsize, &ysize);
-    //aspect = (float)xsize/ysize;
+    int xSize;
+    int ySize;
+    glfwGetFramebufferSize(window, &xSize, &ySize);
+    //aspect = (float)xSize/ySize;
 	projectionMatrix = glm::perspective(glm::radians(fieldOfView), aspect, 0.1f, 100.0f);
 
     glm::vec3 r = -right;
@@ -177,10 +177,10 @@ void oglu::Camera::computeMatrices(){
 }
 
 void oglu::Camera::computeMatricesFrom(glm::vec3& point){
-    int xsize;
-    int ysize;
-    glfwGetFramebufferSize(window, &xsize, &ysize);
-    //aspect = (float)xsize/ysize;
+    int xSize;
+    int ySize;
+    glfwGetFramebufferSize(window, &xSize, &ySize);
+    //aspect = (float)xSize/ySize;
 	projectionMatrix = glm::perspective(glm::radians(fieldOfView), aspect, 0.1f, 100.0f);
 
     glm::vec3 r = -right;

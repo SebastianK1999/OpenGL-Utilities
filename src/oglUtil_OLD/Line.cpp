@@ -40,8 +40,8 @@ void Line::setShaders() {
         layout(location = 3) uniform vec4  circle_color_0;
         layout(location = 4) uniform vec4  circle_color_1;
 
-        out vec4 vcolor;
-        out vec2 vpos;
+        out vec4 vColor;
+        out vec2 vPos;
 
         void main(void) {
             const vec2 vertices[] = vec2[2](vec2( cos(rotation), sin(rotation)),
@@ -49,23 +49,23 @@ void Line::setShaders() {
             const vec4 colors[]    = vec4[2](vec4(circle_color_0),
                                              vec4(circle_color_1));
 
-            vcolor      = colors[gl_VertexID];
+            vColor      = colors[gl_VertexID];
             gl_Position = vec4(vertices[gl_VertexID] * scale + center, 0.5, 1.0); 
-            vpos = vertices[gl_VertexID];
+            vPos = vertices[gl_VertexID];
          }
 
       )END", R"END(
 
          #version 330 
          
-         in  vec4 vcolor;
-         in  vec2 vpos;
+         in  vec4 vColor;
+         in  vec2 vPos;
          out vec4 color;
 
-         vec2 coord = vpos;
+         vec2 coord = vPos;
 
          void main(void) {
-            color = vcolor;
+            color = vColor;
          } 
 
       )END");

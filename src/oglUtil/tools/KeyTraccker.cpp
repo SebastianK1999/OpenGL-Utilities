@@ -25,7 +25,7 @@
 #include "oglUtil/tools/KeyTracker.hpp"
 #include <algorithm>
 
-// TODO - glfwGetTime() instead of std::chrono whitch does not work on Windows
+// TODO - glfwGetTime() instead of std::chrono which does not work on Windows
 oglu::KeyTracker::KeyData::KeyData(const KeyData& other) noexcept:
     key(other.key),
     state(other.state),
@@ -117,7 +117,7 @@ void oglu::KeyTracker::update(GLFWwindow* window,const KeyBundle& keyBundle){
 void oglu::KeyTracker::addKey(const int key) noexcept {
     std::vector<KeyData>::const_iterator keyIterator = std::find_if(trackedKeys.begin(), trackedKeys.end(), [&key](const KeyData& ki){return (ki.key == key);});
     if(keyIterator == trackedKeys.end()){
-        trackedKeys.push_back(KeyData(key, EKeyState_relesed, std::chrono::high_resolution_clock::now()));
+        trackedKeys.push_back(KeyData(key, EKeyState_released, std::chrono::high_resolution_clock::now()));
     }
 }
 
@@ -179,7 +179,7 @@ oglu::EKeyState oglu::KeyTracker::getState(const KeyBundle& keyBundle) const {
     for (KeyBundle::const_iterator keyIterator = keyBundle.begin(); keyIterator != keyBundle.end(); ++keyIterator){
         switch (getState(*keyIterator))
         {
-        case EKeyState_relesed:
+        case EKeyState_released:
             released_count++;
             break;
         case EKeyState_isJustPressed:
@@ -188,7 +188,7 @@ oglu::EKeyState oglu::KeyTracker::getState(const KeyBundle& keyBundle) const {
         case EKeyState_pressed:
             pressed_count++;
             break;
-        case EKeyState_isJustRelesed:
+        case EKeyState_isJustReleased:
             jReleased_count++;
             break;
         default:
@@ -202,19 +202,19 @@ oglu::EKeyState oglu::KeyTracker::getState(const KeyBundle& keyBundle) const {
         return EKeyState_isJustPressed;
     }
     else if(keyBundle.size() == pressed_count + jReleased_count){
-        return EKeyState_isJustRelesed;
+        return EKeyState_isJustReleased;
     }
-    return EKeyState_relesed;
+    return EKeyState_released;
 }
 
 bool oglu::KeyTracker::isReleased(const int key) const {
     EKeyState state = getState(key);
-    return state == EKeyState_relesed || state == EKeyState_isJustRelesed ;
+    return state == EKeyState_released || state == EKeyState_isJustReleased ;
 }
 
 bool oglu::KeyTracker::isReleased(const KeyBundle& keyBundle) const {
     EKeyState state = getState(keyBundle);
-    return state == EKeyState_relesed || state == EKeyState_isJustRelesed ;
+    return state == EKeyState_released || state == EKeyState_isJustReleased ;
     
 }
 
@@ -241,12 +241,12 @@ bool oglu::KeyTracker::isPressed(const KeyBundle& keyBundle) const {
 }
 
 bool oglu::KeyTracker::isJustReleased(const int key) const {
-    return getState(key) == EKeyState_isJustRelesed;
+    return getState(key) == EKeyState_isJustReleased;
     
 }
 
 bool oglu::KeyTracker::isJustReleased(const KeyBundle& keyBundle) const {
-    return getState(keyBundle) == EKeyState_isJustRelesed;
+    return getState(keyBundle) == EKeyState_isJustReleased;
     
 }
 
@@ -267,7 +267,7 @@ void oglu::KeyTracker::update(GLFWwindow* window, KeyData& keyData){
         switch (keyData.state)
         {
         default:
-        case EKeyState_relesed:
+        case EKeyState_released:
             if(glfwGetKey( window, keyData.key ) == GLFW_PRESS){
                 keyData.state = EKeyState_isJustPressed;
                 keyData.stateChangeTime = std::chrono::high_resolution_clock::now();
@@ -278,19 +278,19 @@ void oglu::KeyTracker::update(GLFWwindow* window, KeyData& keyData){
                 keyData.state = EKeyState_pressed;
             }
             else {
-                keyData.state = EKeyState_isJustRelesed;
+                keyData.state = EKeyState_isJustReleased;
                 keyData.stateChangeTime = std::chrono::high_resolution_clock::now();
             }
             break;
         case EKeyState_pressed:
             if(! (glfwGetKey( window, keyData.key ) == GLFW_PRESS)){
-                keyData.state = EKeyState_isJustRelesed;
+                keyData.state = EKeyState_isJustReleased;
                 keyData.stateChangeTime = std::chrono::high_resolution_clock::now();
             }
             break;
-        case EKeyState_isJustRelesed:
+        case EKeyState_isJustReleased:
             if (! (glfwGetKey( window, keyData.key ) == GLFW_PRESS)){
-                keyData.state = EKeyState_relesed;
+                keyData.state = EKeyState_released;
             }
             else {
                 keyData.state = EKeyState_isJustPressed;

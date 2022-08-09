@@ -144,7 +144,7 @@ std::vector<GLfloat> SpheresInstances::generateNormals(int N, std::vector<GLfloa
     return normals;
 }
 
-//first and las tolumn are swaped, now culling shows only inside of cube;
+//first and las column are swapped, now culling shows only inside of cube;
 SpheresInstances::SpheresInstances(const size_t& N) :
     g_vertex_buffer_data(generateMesh(20)),
     g_normal_buffer_data(generateNormals(20, g_vertex_buffer_data)),
@@ -183,7 +183,7 @@ void SpheresInstances::setShaders() {
         #extension GL_ARB_explicit_uniform_location : require
         #extension GL_ARB_shading_language_420pack : require
 
-        layout(location = 0) in vec3 vertexPosition_modelspace;
+        layout(location = 0) in vec3 vertexPosition;
         layout(location = 1) in vec3 offsetPos;
         layout(location = 2) in vec3 offsetScale;
         layout(location = 3) in vec3 normal;
@@ -192,15 +192,15 @@ void SpheresInstances::setShaders() {
         layout(location = 1)uniform vec3 light;
         layout(location = 2)uniform vec3 light2;
 
-        out vec3 vpos;
-        out vec3 vcol;
+        out vec3 vPos;
+        out vec3 vCol;
 
         void main(){
             float R = length(offsetPos - light);
             vec3 L = (offsetPos - light)/R;
             vec3 L2 = (offsetPos - light2) / length(offsetPos - light2);
 
-            gl_Position =  MVP * (vec4(vertexPosition_modelspace,1) * vec4(offsetScale, 1) + vec4(offsetPos,0));
+            gl_Position =  MVP * (vec4(vertexPosition,1) * vec4(offsetScale, 1) + vec4(offsetPos,0));
 
             float r = R;
             if(r > 1){
@@ -208,47 +208,47 @@ void SpheresInstances::setShaders() {
             }
 
             if( acos(dot(normal, L) / length(normal) / length(L)) < 3.141593/2.0){
-                vcol = vec3(0,0,0.75) * (length(dot(L, normal)))*(1-r);
+                vCol = vec3(0,0,0.75) * (length(dot(L, normal)))*(1-r);
             }
             else{
-                vcol = vec3(0.75,0,0) * (length(dot(normal,L)))*(1-r);
+                vCol = vec3(0.75,0,0) * (length(dot(normal,L)))*(1-r);
             }
 
             if( acos(dot(normal, L2) / length(normal) / length(L2)) > 3.141593/2.0){
-                vcol += vec3(0,0.75,0.75) * (length(dot(normal,L2)));
+                vCol += vec3(0,0.75,0.75) * (length(dot(normal,L2)));
             }
             else{
-                vcol += offsetPos * 0.5 * (length(dot(normal,L2)));
+                vCol += offsetPos * 0.5 * (length(dot(normal,L2)));
             }
-            vpos = offsetPos + offsetScale * vertexPosition_modelspace;
+            vPos = offsetPos + offsetScale * vertexPosition;
         }
     )END", R"END(
 
         #version 330 core
 
-        in vec3 vpos;
-        in vec3 vcol;
+        in vec3 vPos;
+        in vec3 vCol;
 
         out vec4 color;
 
         void main(){
-            vec3 ocol = vec3(0.5,1,0.5);
-            ocol = ocol*((vpos[1]+1) * 0.5);
+            vec3 objCol = vec3(0.5,1,0.5);
+            objCol = objCol*((vPos[1]+1) * 0.5);
 
-            // aplha blending
-            float I = length(vcol) + length(ocol)*(1.0 - length(vcol));
-            ocol = ( vcol*length(vcol) + ocol*length(ocol) * (1.0 - length(vcol)) ) / I;
+            // alpha blending
+            float I = length(vCol) + length(objCol)*(1.0 - length(vCol));
+            objCol = ( vCol*length(vCol) + objCol*length(objCol) * (1.0 - length(vCol)) ) / I;
 
-            ocol = ocol*((vpos[1]+1) * 0.9);
+            objCol = objCol*((vPos[1]+1) * 0.9);
 
             color = vec4(
-                ocol[0],
-                ocol[1],
-                ocol[2],
-                (0.25 + 0.6 * length(vcol))
+                objCol[0],
+                objCol[1],
+                objCol[2],
+                (0.25 + 0.6 * length(vCol))
             );
 
-            //color *= ((vpos[1]+1) * 1);
+            //color *= ((vPos[1]+1) * 1);
 
         }
     )END");
@@ -257,13 +257,13 @@ void SpheresInstances::setShaders() {
 void SpheresInstances::setBuffers() {
     bindBuffers();
 
-    GLuint vertexbuffer;   
-    glGenBuffers(1, &vertexbuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+    GLuint vertexBuffer;   
+    glGenBuffers(1, &vertexBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * g_vertex_buffer_data.size(), g_vertex_buffer_data.data(), GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
     glVertexAttribPointer(
         0,                  // attribute. No particular reason for 0, but must match the layout in the shader.
         3,                  // size
@@ -275,13 +275,13 @@ void SpheresInstances::setBuffers() {
 
 
 
-    //GLuint normalbuffer;   
-    glGenBuffers(1, &vertexbuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+    //GLuint normalBuffer;   
+    glGenBuffers(1, &vertexBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * g_normal_buffer_data.size(), g_normal_buffer_data.data(), GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(3);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
     glVertexAttribPointer(
         3,                  // attribute. No particular reason for 0, but must match the layout in the shader.
         3,                  // size

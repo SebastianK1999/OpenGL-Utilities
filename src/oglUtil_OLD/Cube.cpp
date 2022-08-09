@@ -1,6 +1,6 @@
 #include "oglUtil_OLD/Cube.hpp"
 
-//first and las tolumn are swaped, now culling shows only inside of cube;
+//first and las column are swapped, now culling shows only inside of cube;
 const GLfloat Cube::g_vertex_buffer_data[] = { 
     -1.0f,-1.0f,-1.0f,
      1.0f,-1.0f,-1.0f,
@@ -94,32 +94,32 @@ void Cube::setShaders() {
         #extension GL_ARB_explicit_uniform_location : require
         #extension GL_ARB_shading_language_420pack : require
 
-        layout(location = 0) in vec3 vertexPosition_modelspace;
+        layout(location = 0) in vec3 vertexPosition;
         layout(location = 1) in vec3 vertexColor;
 
         layout(location = 0)uniform mat4 MVP;
         layout(location = 1)uniform vec4 scale;
 
         out vec3 fragmentColor;
-        out vec3 vpos;
+        out vec3 vPos;
 
         void main(){	
-            gl_Position =  MVP * (scale * vec4(vertexPosition_modelspace,1));
+            gl_Position =  MVP * (scale * vec4(vertexPosition,1));
             fragmentColor = vertexColor;
-            vpos = vec3(0.0) + vec3(scale[0],scale[1],scale[2]) * vertexPosition_modelspace;
+            vPos = vec3(0.0) + vec3(scale[0],scale[1],scale[2]) * vertexPosition;
         }
     )END", R"END(
 
         #version 330 core
 
         in vec3 fragmentColor;
-        in vec3 vpos;
+        in vec3 vPos;
 
         out vec4 color;
 
         void main(){
-            vec3 ocol = vec3(0,vpos[2],1)*((vpos[1]+1) * 0.5);
-            color = vec4(ocol,1);
+            vec3 objCol = vec3(0,vPos[2],1)*((vPos[1]+1) * 0.5);
+            color = vec4(objCol,1);
 
         }
 
@@ -129,18 +129,18 @@ void Cube::setShaders() {
 void Cube::setBuffers() {
     bindBuffers();
 
-    GLuint vertexbuffer;    
-    glGenBuffers(1, &vertexbuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+    GLuint vertexBuffer;    
+    glGenBuffers(1, &vertexBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
 
-    GLuint colorbuffer;
-    glGenBuffers(1, &colorbuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
+    GLuint colorBuffer;
+    glGenBuffers(1, &colorBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, colorBuffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data), g_color_buffer_data, GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
     glVertexAttribPointer(
         0,                  // attribute. No particular reason for 0, but must match the layout in the shader.
         3,                  // size
@@ -151,7 +151,7 @@ void Cube::setBuffers() {
     );
 
     glEnableVertexAttribArray(1);
-    glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, colorBuffer);
     glVertexAttribPointer(
         1,                                // attribute. No particular reason for 1, but must match the layout in the shader.
         3,                                // size

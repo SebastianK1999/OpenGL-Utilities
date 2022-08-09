@@ -14,7 +14,7 @@ void Background::setShaders() {
         #version 330 
         #extension GL_ARB_explicit_uniform_location : require
         #extension GL_ARB_shading_language_420pack : require
-        out vec3 vpos;
+        out vec3 vPos;
 
 		layout(location = 12)uniform mat4 MVP;
          
@@ -25,7 +25,7 @@ void Background::setShaders() {
                                             vec3(-0.9,  0.9, 0),
                                             vec3(-0.9,  0, 0));
         gl_Position = MVP * vec4(vertices[gl_VertexID], 1.0); 
-        vpos = vertices[gl_VertexID];
+        vPos = vertices[gl_VertexID];
         }
 
     )END", R"END(
@@ -37,14 +37,14 @@ void Background::setShaders() {
         layout(location = 10) uniform vec3  xs;
         layout(location = 11) uniform vec3  ys;
 
-        in  vec3 vpos;
+        in  vec3 vPos;
         out vec4 color;
 
         void main(void) {
             color = vec4(
-                (1 - sqrt( pow(vpos.x - xs[0], 2) + pow(vpos.y - ys[0],2) )) * 0.6  ,
-                (1 - sqrt( pow(vpos.x - xs[1], 2) + pow(vpos.y - ys[1],2) )) * 0.6  ,
-                (1 - sqrt( pow(vpos.x - xs[2], 2) + pow(vpos.y - ys[2],2) )) * 0.6  ,
+                (1 - sqrt( pow(vPos.x - xs[0], 2) + pow(vPos.y - ys[0],2) )) * 0.6  ,
+                (1 - sqrt( pow(vPos.x - xs[1], 2) + pow(vPos.y - ys[1],2) )) * 0.6  ,
+                (1 - sqrt( pow(vPos.x - xs[2], 2) + pow(vPos.y - ys[2],2) )) * 0.6  ,
                 1);
         } 
 

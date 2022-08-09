@@ -17,14 +17,14 @@ MovingViewPort::MovingViewPort(GLFWwindow *window):
 	ProjectionMatrix(),
 	radius(0)
 {
-	int xsize, ysize;
-	glfwGetWindowSize(window, &xsize, &ysize);
+	int xSize, ySize;
+	glfwGetWindowSize(window, &xSize, &ySize);
 
     glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
 	glfwSetInputMode(window, GLFW_STICKY_MOUSE_BUTTONS, GLFW_TRUE);
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwPollEvents();
-    glfwSetCursorPos(window, xsize/2, ysize/2);
+    glfwSetCursorPos(window, xSize/2, ySize/2);
 }
 
 float MovingViewPort::getTime(){
@@ -50,19 +50,19 @@ void MovingViewPort::computeMatricesFromInputs(){
 	this->dt = deltaTime;
 
 	// Get mouse position
-	double xpos, ypos;
-	glfwGetCursorPos(window, &xpos, &ypos);
+	double xPos, yPos;
+	glfwGetCursorPos(window, &xPos, &yPos);
 
-	int xsize, ysize;
-	glfwGetWindowSize(window, &xsize, &ysize);
+	int xSize, ySize;
+	glfwGetWindowSize(window, &xSize, &ySize);
 
 	if(active){
 		// Reset mouse position for next frame
-		glfwSetCursorPos(window, xsize/2, ysize/2);
+		glfwSetCursorPos(window, xSize/2, ySize/2);
 
 		// Compute new orientation
-		horizontalAngle += mouseSpeed * float(xsize/2 - xpos );
-		verticalAngle   += mouseSpeed * float( ysize/2 - ypos );
+		horizontalAngle += mouseSpeed * float(xSize/2 - xPos);
+		verticalAngle   += mouseSpeed * float( ySize/2 - yPos);
 	}
 	if(verticalAngle > 1.5) verticalAngle = 1.5; 
 	else if( verticalAngle < -1.5) verticalAngle = -1.5;
@@ -125,7 +125,7 @@ void MovingViewPort::computeMatricesFromInputs(){
 	float FoV = initialFoV;// - 5 * glfwGetMouseWheel(); // Now GLFW 3 requires setting up a callback for this. It's a bit too complicated for this beginner's tutorial, so it's disabled instead.
 
 	// Projection matrix : 45� Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
-	ProjectionMatrix = glm::perspective(glm::radians(FoV), (float)xsize/ysize, 0.1f, 100.0f);
+	ProjectionMatrix = glm::perspective(glm::radians(FoV), (float)xSize/ySize, 0.1f, 100.0f);
 	// Camera matrix
 	//std::cout << position[0] << "\t" << position[1] << "\t" << position[2] << "\n";
 	ViewMatrix       = glm::lookAt(
@@ -150,19 +150,19 @@ void MovingViewPort::computeMatricesFromInputs(glm::vec3& objectPos){
 	this->dt = deltaTime;
 
 	// Get mouse position
-	double xpos, ypos;
-	glfwGetCursorPos(window, &xpos, &ypos);
+	double xPos, yPos;
+	glfwGetCursorPos(window, &xPos, &yPos);
 
-	int xsize, ysize;
-	glfwGetWindowSize(window, &xsize, &ysize);
+	int xSize, ySize;
+	glfwGetWindowSize(window, &xSize, &ySize);
 
 	if(active){
 		// Reset mouse position for next frame
-		glfwSetCursorPos(window, xsize/2, xsize/2);
+		glfwSetCursorPos(window, xSize/2, xSize/2);
 
 		// Compute new orientation
-		horizontalAngle += mouseSpeed * float(xsize/2 - xpos );
-		verticalAngle   += mouseSpeed * float( xsize/2 - ypos );
+		horizontalAngle += mouseSpeed * float(xSize/2 - xPos);
+		verticalAngle   += mouseSpeed * float( xSize/2 - yPos);
 	}
 	if(verticalAngle > 1.5) verticalAngle = 1.5; 
 	else if( verticalAngle < -1.5) verticalAngle = -1.5;
@@ -225,7 +225,7 @@ void MovingViewPort::computeMatricesFromInputs(glm::vec3& objectPos){
 	float FoV = initialFoV;// - 5 * glfwGetMouseWheel(); // Now GLFW 3 requires setting up a callback for this. It's a bit too complicated for this beginner's tutorial, so it's disabled instead.
 
 	// Projection matrix : 45� Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
-	ProjectionMatrix = glm::perspective(glm::radians(FoV), (float)xsize/ysize, 0.1f, 100.0f);
+	ProjectionMatrix = glm::perspective(glm::radians(FoV), (float)xSize/ySize, 0.1f, 100.0f);
 	// Camera matrix
 	//std::cout << position[0] << "\t" << position[1] << "\t" << position[2] << "\n";
 	ViewMatrix       = glm::lookAt(

@@ -32,7 +32,7 @@
 bool oglu::setupOglu(){
 	// TODO
 	// check log file ? create : pass
-	// wrtire date time to it
+	// write date time to it
 
 	return true;
 }

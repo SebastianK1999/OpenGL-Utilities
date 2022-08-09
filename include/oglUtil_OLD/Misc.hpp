@@ -21,7 +21,7 @@ namespace Misc{
     std::uniform_int_distribution<int> disMaxInt;
     std::uniform_int_distribution<int> disAllInt;
     // double distributors
-    std::uniform_real_distribution<double> disZeroOnedouble;
+    std::uniform_real_distribution<double> disZeroOneDouble;
     
     public:
     static rand& get();
@@ -31,8 +31,8 @@ namespace Misc{
 
 
     int binary(); // returns one or zero
-    int allInt(); // returns positive and nagative numbers
-    int maxInt(); // returns poitive number
+    int allInt(); // returns positive and negative numbers
+    int maxInt(); // returns positive number
     int randInt(int n, int N); // returns number in range
     int randInt(int N); // returns number in range from 0 to N
 

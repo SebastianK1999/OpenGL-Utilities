@@ -57,7 +57,7 @@ namespace oglu
         GLuint getProgramId() const;
 
         private:
-        GLuint vaoId;       // Vertex Array Ocjects
+        GLuint vaoId;       // Vertex Array Objects
         GLuint vboId;       // Vertex Buffer Objects
         GLuint eboId;       // Element Buffer Objects
         GLuint programId;

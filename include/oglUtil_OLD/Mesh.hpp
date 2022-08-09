@@ -30,7 +30,7 @@ public:
         std::vector<glm::vec2> & out_uvs, 
         std::vector<glm::vec3> & out_normals
     );
-    GLuint loadBMP(const char * imagepath);
+    GLuint loadBMP(const char * imagePath);
 
     std::vector<glm::vec3> vertex_buffer_data;
     std::vector<glm::vec2> uvs_buffer_data;

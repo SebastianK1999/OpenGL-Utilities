@@ -147,7 +147,7 @@ void Sphere::setShaders() {
         #extension GL_ARB_explicit_uniform_location : require
         #extension GL_ARB_shading_language_420pack : require
 
-        layout(location = 0) in vec3 vertexPosition_modelspace;
+        layout(location = 0) in vec3 vertexPosition;
         layout(location = 1) in vec3 normal;
         layout(location = 0) uniform vec4 pos;
         layout(location = 1) uniform vec4 scale;
@@ -155,8 +155,8 @@ void Sphere::setShaders() {
 
         layout(location = 3)uniform mat4 MVP;
 
-        out vec3 vpos;
-        out vec3 vcol;
+        out vec3 vPos;
+        out vec3 vCol;
 
         void main(){
             vec3 pos3 = vec3(pos[0],pos[1],pos[2]);
@@ -164,7 +164,7 @@ void Sphere::setShaders() {
             vec3 sc = vec3(scale[0],scale[1],scale[2]);
             vec3 L = (pos3 - light)/R;	
             
-            gl_Position =  MVP * (vec4(vertexPosition_modelspace,1) * scale + pos);
+            gl_Position =  MVP * (vec4(vertexPosition,1) * scale + pos);
 
             float r = R;
             if(r > 1){
@@ -172,40 +172,40 @@ void Sphere::setShaders() {
             }
 
             if( acos(dot(normal, L) / length(normal) / length(L)) > 3.141593/2.0){
-                vcol = vec3(0,0.6,0.9) * (length(dot(normal,L)));
+                vCol = vec3(0,0.6,0.9) * (length(dot(normal,L)));
             }
             else{
-                vcol = vec3(1,1,1) * 0.7 * (length(dot(normal,L)));
+                vCol = vec3(1,1,1) * 0.7 * (length(dot(normal,L)));
             }
-            vpos = pos3 + sc * vertexPosition_modelspace;
+            vPos = pos3 + sc * vertexPosition;
         }
     )END", R"END(
 
         #version 330 core
 
-        in vec3 vpos;
-        in vec3 vcol;
+        in vec3 vPos;
+        in vec3 vCol;
 
         out vec4 color;
 
         void main(){
-            vec3 ocol = vec3(0.5,0,0.5);
-            ocol = ocol*((vpos[1]+1) * 0.5);
+            vec3 objCol = vec3(0.5,0,0.5);
+            objCol = objCol*((vPos[1]+1) * 0.5);
 
-            // aplha blending
-            float I = length(vcol) + length(ocol)*(1.0 - length(vcol));
-            ocol = ( vcol*length(vcol) + ocol*length(ocol) * (1.0 - length(vcol)) ) / I;
+            // alpha blending
+            float I = length(vCol) + length(objCol)*(1.0 - length(vCol));
+            objCol = ( vCol*length(vCol) + objCol*length(objCol) * (1.0 - length(vCol)) ) / I;
 
-            ocol = ocol*((vpos[1]+1) * 0.9);
+            objCol = objCol*((vPos[1]+1) * 0.9);
 
             color = vec4(
-                ocol[0],
-                ocol[1],
-                ocol[2],
-                (0.25 + 0.6 * length(vcol))
+                objCol[0],
+                objCol[1],
+                objCol[2],
+                (0.25 + 0.6 * length(vCol))
             );
 
-            //color *= ((vpos[1]+1) * 1);
+            //color *= ((vPos[1]+1) * 1);
 
         }
     )END");
@@ -214,13 +214,13 @@ void Sphere::setShaders() {
 void Sphere::setBuffers() {
     bindBuffers();
 
-    GLuint vertexbuffer;    
-    glGenBuffers(1, &vertexbuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+    GLuint vertexBuffer;    
+    glGenBuffers(1, &vertexBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * g_vertex_buffer_data.size(), g_vertex_buffer_data.data(), GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
     glVertexAttribPointer(
         0,                  // attribute. No particular reason for 0, but must match the layout in the shader.
         3,                  // size
@@ -230,13 +230,13 @@ void Sphere::setBuffers() {
         (void*)0            // array buffer offset
     );
 
-    //GLuint normalbuffer;   
-    glGenBuffers(1, &vertexbuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+    //GLuint normalBuffer;   
+    glGenBuffers(1, &vertexBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * g_normal_buffer_data.size(), g_normal_buffer_data.data(), GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(1);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
     glVertexAttribPointer(
         1,                  // attribute. No particular reason for 0, but must match the layout in the shader.
         3,                  // size

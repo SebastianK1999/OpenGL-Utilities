@@ -88,7 +88,7 @@ oglu::Window::Window(const int width, const int height, const std::string& name,
     glfwSwapInterval(1);  // 60 fps ?
     glEnable(GL_MULTISAMPLE);
 
-    glfwSetInputMode(getGLFWwindowPtr(), GLFW_STICKY_KEYS, GL_TRUE);
+    glfwSetInputMode(getGlfwWindowPtr(), GLFW_STICKY_KEYS, GL_TRUE);
 	glClearColor(0.4f, 0.0f, 0.0f, 0.0f);
     
     oglu::setupGlew(false);
@@ -137,14 +137,14 @@ void oglu::Window::switchFullScreen(const bool fullscreenLastMonitor){
     setFullScreen(! isFullScreen(), fullscreenLastMonitor);
 }
 
-GLFWwindow* oglu::Window::getGLFWwindowPtr() const {
+GLFWwindow* oglu::Window::getGlfwWindowPtr() const {
     return glfwWindowPtr;
 }
 
 void oglu::Window::mainLoop(){
     do {
         renderWindow();
-    } while( glfwWindowShouldClose(getGLFWwindowPtr()) == 0 && glfwWindowPtr != nullptr);
+    } while( glfwWindowShouldClose(getGlfwWindowPtr()) == 0 && glfwWindowPtr != nullptr);
 }
 
 //.void oglu::Window::mainLoopThread();
@@ -157,7 +157,7 @@ void oglu::Window::renderWindow(){
     printErrorsDbg("mainFunction");
     drawFunction();
     printErrorsDbg("drawFunction");
-    glfwSwapBuffers(getGLFWwindowPtr()); // Swap buffers
+    glfwSwapBuffers(getGlfwWindowPtr()); // Swap buffers
     glfwPollEvents();
     printErrorsDbg("glfwSwapBuffers or glfwPollEvents");
 }

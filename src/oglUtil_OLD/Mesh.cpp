@@ -158,9 +158,9 @@ bool Mesh::loadOBJ(const char * path, std::vector<glm::vec3> & out_vertices, std
 	return true;
 }
 
-GLuint Mesh::loadBMP(const char * imagepath){
+GLuint Mesh::loadBMP(const char * imagePath){
 
-	printf("Reading image %s\n", imagepath);
+	printf("Reading image %s\n", imagePath);
 
 	// Data read from the header of the BMP file
 	unsigned char header[54];
@@ -171,9 +171,9 @@ GLuint Mesh::loadBMP(const char * imagepath){
 	unsigned char * data;
 
 	// Open the file
-	FILE * file = fopen(imagepath,"rb");
+	FILE * file = fopen(imagePath,"rb");
 	if (!file){
-		printf("%s could not be opened. Are you in the right directory ? Don't forget to read the FAQ !\n", imagepath);
+		printf("%s could not be opened. Are you in the right directory ? Don't forget to read the FAQ !\n", imagePath);
 		getchar();
 		return 0;
 	}
@@ -359,9 +359,9 @@ void Mesh::setShader(const std::string& _path){
 void Mesh::setBuffers() {
     bindBuffers();
 
-    GLuint vertexbuffer;    
-    glGenBuffers(1, &vertexbuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+    GLuint vertexBuffer;    
+    glGenBuffers(1, &vertexBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * vertex_buffer_data.size(), vertex_buffer_data.data(), GL_STATIC_DRAW);
 
 
@@ -370,7 +370,7 @@ void Mesh::setBuffers() {
 
 
     glEnableVertexAttribArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
     glVertexAttribPointer(
         0,                  // attribute. No particular reason for 0, but must match the layout in the shader.
         3,                  // size
@@ -381,13 +381,13 @@ void Mesh::setBuffers() {
     );
 
 
-    GLuint uvsbuffer;   
-    glGenBuffers(1, &uvsbuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, uvsbuffer);
+    GLuint uvsBuffer;   
+    glGenBuffers(1, &uvsBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, uvsBuffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * uvs_buffer_data.size(), uvs_buffer_data.data(), GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(1);
-    glBindBuffer(GL_ARRAY_BUFFER, uvsbuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, uvsBuffer);
     glVertexAttribPointer(
         1,                  // attribute. No particular reason for 0, but must match the layout in the shader.
         2,                  // size
@@ -397,13 +397,13 @@ void Mesh::setBuffers() {
         (void*)0            // array buffer offset
     );
 
-    GLuint normalbuffer;   
-    glGenBuffers(1, &normalbuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
+    GLuint normalBuffer;   
+    glGenBuffers(1, &normalBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, normalBuffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * normal_buffer_data.size(), normal_buffer_data.data(), GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(2);
-    glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, normalBuffer);
     glVertexAttribPointer(
         2,                  // attribute. No particular reason for 0, but must match the layout in the shader.
         3,                  // size
