@@ -156,7 +156,7 @@ void oglu::Camera::computeMatrices(){
     int ySize;
     glfwGetFramebufferSize(window, &xSize, &ySize);
     //aspect = (float)xSize/ySize;
-	projectionMatrix = glm::perspective(glm::radians(fieldOfView), aspect, 0.1f, 100.0f);
+	projectionMatrix = glm::perspective(glm::radians(fieldOfView), aspect, 0.1f, 1000.0f);
 
     glm::vec3 r = -right;
     glm::vec3 d = -direction;
@@ -181,7 +181,7 @@ void oglu::Camera::computeMatricesFrom(glm::vec3& point){
     int ySize;
     glfwGetFramebufferSize(window, &xSize, &ySize);
     //aspect = (float)xSize/ySize;
-	projectionMatrix = glm::perspective(glm::radians(fieldOfView), aspect, 0.1f, 100.0f);
+	projectionMatrix = glm::perspective(glm::radians(fieldOfView), aspect, 0.1f, 1000.0f);
 
     glm::vec3 r = -right;
     glm::vec3 d = -direction;

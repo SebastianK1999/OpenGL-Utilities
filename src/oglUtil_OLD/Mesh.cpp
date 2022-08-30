@@ -1,5 +1,6 @@
 #include "oglUtil_OLD/Mesh.hpp"
 
+#include <iostream>
 #include <sstream>
 #include <fstream>
 #include <cstring>
@@ -7,10 +8,11 @@
 #include <math.h>
 #include "whereami.h"
 
-
+static constexpr bool LOG_RESOURCE_LOADING = 0;
 
 Mesh::Mesh(const std::string& _path)
 : Drawable()
+, DrawableBase()
 , meshPath("")
 , texturePath("")
 , vsPath("")
@@ -47,8 +49,42 @@ Mesh::Mesh(const std::string& _path)
     setBuffers();
 }
 
+Mesh::Mesh(const Mesh& other) noexcept
+: Drawable(other)
+, DrawableBase(other)
+, meshPath(other.meshPath)
+, texturePath(other.texturePath)
+, vsPath(other.vsPath)
+, fsPath(other.fsPath)
+, primaryColor(other.primaryColor)
+, vertex_buffer_data(other.vertex_buffer_data)
+, uvs_buffer_data(other.uvs_buffer_data)
+, normal_buffer_data(other.normal_buffer_data)
+, texture(other.texture)
+, shader(other.shader)
+{   
+    setBuffers();
+}
+
+Mesh::Mesh(Mesh&& other) noexcept
+: Drawable(std::move(other))
+, DrawableBase(std::move(other))
+, meshPath(std::move(other.meshPath))
+, texturePath(std::move(other.texturePath))
+, vsPath(std::move(other.vsPath))
+, fsPath(std::move(other.fsPath))
+, primaryColor(std::move(other.primaryColor))
+, vertex_buffer_data(std::move(other.vertex_buffer_data))
+, uvs_buffer_data(std::move(other.uvs_buffer_data))
+, normal_buffer_data(std::move(other.normal_buffer_data))
+, texture(std::move(other.texture))
+, shader(std::move(other.shader))
+{   
+    setBuffers();
+}
+
 bool Mesh::loadOBJ(const char * path, std::vector<glm::vec3> & out_vertices, std::vector<glm::vec2> & out_uvs, std::vector<glm::vec3> & out_normals){
-    	printf("Loading OBJ file %s...\n", path);
+    	if constexpr (LOG_RESOURCE_LOADING) printf("Loading OBJ file %s...\n", path);
 
 	std::vector<unsigned int> vertexIndices, uvIndices, normalIndices;
 	std::vector<glm::vec3> temp_vertices; 
@@ -58,7 +94,7 @@ bool Mesh::loadOBJ(const char * path, std::vector<glm::vec3> & out_vertices, std
 
 	FILE * file = fopen(path, "r");
 	if( file == NULL ){
-		printf("Impossible to open the file ! Are you in the right path ? See Tutorial 1 for details\n");
+		if constexpr (LOG_RESOURCE_LOADING) printf("Impossible to open the file ! Are you in the right path ? See Tutorial 1 for details\n");
 		getchar();
 		return false;
 	}
@@ -127,7 +163,7 @@ bool Mesh::loadOBJ(const char * path, std::vector<glm::vec3> & out_vertices, std
                     normalIndices.push_back(normalIndex[2]);
                 }
                 else{
-                    printf("File can't be read by our simple parser :-( Try exporting with other options\n");
+                    if constexpr (LOG_RESOURCE_LOADING) printf("File can't be read by our simple parser :-( Try exporting with other options\n");
                     fclose(file);
                     return false;
                 }
@@ -160,7 +196,7 @@ bool Mesh::loadOBJ(const char * path, std::vector<glm::vec3> & out_vertices, std
 
 GLuint Mesh::loadBMP(const char * imagePath){
 
-	printf("Reading image %s\n", imagePath);
+	if constexpr (LOG_RESOURCE_LOADING) printf("Reading image %s\n", imagePath);
 
 	// Data read from the header of the BMP file
 	unsigned char header[54];
@@ -173,7 +209,7 @@ GLuint Mesh::loadBMP(const char * imagePath){
 	// Open the file
 	FILE * file = fopen(imagePath,"rb");
 	if (!file){
-		printf("%s could not be opened. Are you in the right directory ? Don't forget to read the FAQ !\n", imagePath);
+		if constexpr (LOG_RESOURCE_LOADING) printf("%s could not be opened. Are you in the right directory ? Don't forget to read the FAQ !\n", imagePath);
 		getchar();
 		return 0;
 	}
@@ -182,19 +218,19 @@ GLuint Mesh::loadBMP(const char * imagePath){
 
 	// If less than 54 bytes are read, problem
 	if ( fread(header, 1, 54, file)!=54 ){ 
-		printf("Not a correct BMP file\n");
+		if constexpr (LOG_RESOURCE_LOADING) printf("Not a correct BMP file\n");
 		fclose(file);
 		return 0;
 	}
 	// A BMP files always begins with "BM"
 	if ( header[0]!='B' || header[1]!='M' ){
-		printf("Not a correct BMP file\n");
+		if constexpr (LOG_RESOURCE_LOADING) printf("Not a correct BMP file\n");
 		fclose(file);
 		return 0;
 	}
 	// Make sure this is a 24bpp file
-	if ( *(int*)&(header[0x1E])!=0  )         {printf("Not a correct BMP file\n");    fclose(file); return 0;}
-	if ( *(int*)&(header[0x1C])!=24 )         {printf("Not a correct BMP file\n");    fclose(file); return 0;}
+	if ( *(int*)&(header[0x1E])!=0  )         {if constexpr (LOG_RESOURCE_LOADING) printf("Not a correct BMP file\n");    fclose(file); return 0;}
+	if ( *(int*)&(header[0x1C])!=24 )         {if constexpr (LOG_RESOURCE_LOADING) printf("Not a correct BMP file\n");    fclose(file); return 0;}
 
 	// Read the information about the image
 	dataPos    = *(int*)&(header[0x0A]);
@@ -264,7 +300,7 @@ GLuint Mesh::LoadShaders(const char * vertex_file_path,const char * fragment_fil
 		VertexShaderCode = sstr.str();
 		VertexShaderStream.close();
 	}else{
-		printf("Impossible to open %s. Are you in the right directory ? Don't forget to read the FAQ !\n", vertex_file_path);
+		if constexpr (LOG_RESOURCE_LOADING) printf("Impossible to open %s. Are you in the right directory ? Don't forget to read the FAQ !\n", vertex_file_path);
 		getchar();
 		return 0;
 	}
@@ -284,7 +320,7 @@ GLuint Mesh::LoadShaders(const char * vertex_file_path,const char * fragment_fil
 
 
 	// Compile Vertex Shader
-	printf("Compiling shader : %s\n", vertex_file_path);
+	if constexpr (LOG_RESOURCE_LOADING) printf("Compiling shader : %s\n", vertex_file_path);
 	char const * VertexSourcePointer = VertexShaderCode.c_str();
 	glShaderSource(VertexShaderID, 1, &VertexSourcePointer , NULL);
 	glCompileShader(VertexShaderID);
@@ -295,13 +331,13 @@ GLuint Mesh::LoadShaders(const char * vertex_file_path,const char * fragment_fil
 	if ( InfoLogLength > 0 ){
 		std::vector<char> VertexShaderErrorMessage(InfoLogLength+1);
 		glGetShaderInfoLog(VertexShaderID, InfoLogLength, NULL, &VertexShaderErrorMessage[0]);
-		printf("%s\n", &VertexShaderErrorMessage[0]);
+		if constexpr (LOG_RESOURCE_LOADING) printf("%s\n", &VertexShaderErrorMessage[0]);
 	}
 
 
 
 	// Compile Fragment Shader
-	printf("Compiling shader : %s\n", fragment_file_path);
+	if constexpr (LOG_RESOURCE_LOADING) printf("Compiling shader : %s\n", fragment_file_path);
 	char const * FragmentSourcePointer = FragmentShaderCode.c_str();
 	glShaderSource(FragmentShaderID, 1, &FragmentSourcePointer , NULL);
 	glCompileShader(FragmentShaderID);
@@ -312,13 +348,13 @@ GLuint Mesh::LoadShaders(const char * vertex_file_path,const char * fragment_fil
 	if ( InfoLogLength > 0 ){
 		std::vector<char> FragmentShaderErrorMessage(InfoLogLength+1);
 		glGetShaderInfoLog(FragmentShaderID, InfoLogLength, NULL, &FragmentShaderErrorMessage[0]);
-		printf("%s\n", &FragmentShaderErrorMessage[0]);
+		if constexpr (LOG_RESOURCE_LOADING) printf("%s\n", &FragmentShaderErrorMessage[0]);
 	}
 
 
 
 	// Link the program
-	printf("Linking program\n");
+	if constexpr (LOG_RESOURCE_LOADING) printf("Linking program\n");
 	GLuint ProgramID = glCreateProgram();
 	glAttachShader(ProgramID, VertexShaderID);
 	glAttachShader(ProgramID, FragmentShaderID);
@@ -330,7 +366,7 @@ GLuint Mesh::LoadShaders(const char * vertex_file_path,const char * fragment_fil
 	if ( InfoLogLength > 0 ){
 		std::vector<char> ProgramErrorMessage(InfoLogLength+1);
 		glGetProgramInfoLog(ProgramID, InfoLogLength, NULL, &ProgramErrorMessage[0]);
-		printf("%s\n", &ProgramErrorMessage[0]);
+		if constexpr (LOG_RESOURCE_LOADING) printf("%s\n", &ProgramErrorMessage[0]);
 	}
 
 	
@@ -380,7 +416,6 @@ void Mesh::setBuffers() {
         (void*)0            // array buffer offset
     );
 
-
     GLuint uvsBuffer;   
     glGenBuffers(1, &uvsBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, uvsBuffer);
@@ -414,7 +449,7 @@ void Mesh::setBuffers() {
     );
 }
 
-void Mesh::draw(const glm::mat4& MVP, const glm::vec3& light) {
+void Mesh::draw(const glm::mat4& MVP, const glm::vec3& light) const {
     glBindTexture(GL_TEXTURE_2D, texture);
     glUseProgram(shader);
     bindBuffers();

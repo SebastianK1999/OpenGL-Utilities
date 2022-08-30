@@ -44,14 +44,22 @@ oglu::DrawableBase::DrawableBase(const DrawableBase& other) noexcept
 , vboId(other.vboId)
 , eboId(other.eboId)
 , programId(other.programId)
-{}
+{
+   glGenVertexArrays(1, &vaoId);
+   // glGenBuffers(     1, &vboId);
+   // glGenBuffers(     1, &eboId);
+}
 
 oglu::DrawableBase::DrawableBase(DrawableBase&& other) noexcept
 : vaoId(std::move(other.vaoId))
 , vboId(std::move(other.vboId))
 , eboId(std::move(other.eboId))
 , programId(std::move(other.programId))
-{}
+{
+   glGenVertexArrays(1, &vaoId);
+   // glGenBuffers(     1, &vboId);
+   // glGenBuffers(     1, &eboId);
+}
 
 oglu::DrawableBase& oglu::DrawableBase::operator=(const DrawableBase& other) noexcept {
     vaoId = other.vaoId;
@@ -187,7 +195,7 @@ void oglu::DrawableBase::getShaderSource(const GLuint sId, const char*const  fil
       } else {
          printf("Error opening file:  %s !\n", file);
          getchar();
-         return ;
+         return;
       }
       char const * SourcePointer = sCode.c_str();
       glShaderSource(sId, 1, &SourcePointer , NULL);

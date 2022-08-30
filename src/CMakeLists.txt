@@ -87,6 +87,8 @@ ${OGL_UTIL_INCLUDE_DRAWABLES_FILE_CONTENT}
     )
     target_include_directories(oglu PUBLIC "${CMAKE_CURRENT_LIST_DIR}/../include/")
     target_link_libraries(oglu PUBLIC ${CORE_LIBS} glm libepoxy glfw GLEW whereami)
+    target_compile_features(oglu PRIVATE cxx_std_20)
+
 endif()
 
 

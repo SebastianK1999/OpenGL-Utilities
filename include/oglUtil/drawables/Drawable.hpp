@@ -45,8 +45,6 @@ namespace oglu
         Drawable();
         //virtual void draw();
 
-
-    
     private:
 
     };
