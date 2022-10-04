@@ -10,13 +10,13 @@ void SpheresInstances::move(float dt){
         this->scale[i][1] *= 1.0+1e-3;
         this->scale[i][2] *= 1.0+1e-3;
         if(this->pos[i][1] - this->scale[i][1] > 1){
-            float sc = Misc::rand::get().Decim(1/(double)N, 0.5/(double)N);
+            float sc = Misc::rand::get().decim(1/(double)N, 0.5/(double)N);
             this->scale[i][0] = sc;
             this->scale[i][1] = sc;
             this->scale[i][2] = sc;
-            this->pos[i][0] = Misc::rand::get().Decim( -1 + this->scale[i][0], 1 - this->scale[i][0] );
+            this->pos[i][0] = Misc::rand::get().decim( -1 + this->scale[i][0], 1 - this->scale[i][0] );
             this->pos[i][1] = -1 - this->scale[i][1];
-            this->pos[i][2] = Misc::rand::get().Decim( -1 + this->scale[i][2], 1 - this->scale[i][2] );
+            this->pos[i][2] = Misc::rand::get().decim( -1 + this->scale[i][2], 1 - this->scale[i][2] );
         }
     }
 }
@@ -155,13 +155,13 @@ SpheresInstances::SpheresInstances(const size_t& N) :
     scale = new glm::vec3[sizeInstances];
 
     for(int i = 0; i < sizeInstances; i++){
-        float sc = Misc::rand::get().Decim(1/(double)N, 0.5/(double)N);
+        float sc = Misc::rand::get().decim(1/(double)N, 0.5/(double)N);
         this->scale[i][0] = sc;
         this->scale[i][1] = sc;
         this->scale[i][2] = sc;
-        this->pos[i][0] = Misc::rand::get().Decim( -1 + this->scale[i][0], 1 - this->scale[i][0] );
-        this->pos[i][1] = Misc::rand::get().Decim( -1 + this->scale[i][1], 1 - this->scale[i][1] );
-        this->pos[i][2] = Misc::rand::get().Decim( -1 + this->scale[i][2], 1 - this->scale[i][2] );
+        this->pos[i][0] = Misc::rand::get().decim( -1 + this->scale[i][0], 1 - this->scale[i][0] );
+        this->pos[i][1] = Misc::rand::get().decim( -1 + this->scale[i][1], 1 - this->scale[i][1] );
+        this->pos[i][2] = Misc::rand::get().decim( -1 + this->scale[i][2], 1 - this->scale[i][2] );
         
     }
     

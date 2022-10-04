@@ -36,9 +36,9 @@ namespace Misc{
     int randInt(int n, int N); // returns number in range
     int randInt(int N); // returns number in range from 0 to N
 
-    double Decim(); // returns number from 0.0 to 1.0
-    double Decim(double,double); // returns number in range
-    double Decim(double); // returns number in range from 0 to N
+    double decim(); // returns number from 0.0 to 1.0
+    double decim(double,double); // returns number in range
+    double decim(double); // returns number in range from 0 to N
 
     };
 } // end Misc

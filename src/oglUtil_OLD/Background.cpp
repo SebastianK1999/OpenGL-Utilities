@@ -2,9 +2,9 @@
 
 Background::Background() : 
     DrawableBase(0),
-    xs{Misc::rand::get().Decim(-0.9,0.9), Misc::rand::get().Decim(-0.9,0.9), Misc::rand::get().Decim(-0.9,0.9)},
-    ys{Misc::rand::get().Decim(-0.9,0.9), Misc::rand::get().Decim(-0.9,0.9), Misc::rand::get().Decim(-0.9,0.9)},
-    alphas{Misc::rand::get().Decim(2*M_PI), Misc::rand::get().Decim(2*M_PI), Misc::rand::get().Decim(2*M_PI)}
+    xs{Misc::rand::get().decim(-0.9,0.9), Misc::rand::get().decim(-0.9,0.9), Misc::rand::get().decim(-0.9,0.9)},
+    ys{Misc::rand::get().decim(-0.9,0.9), Misc::rand::get().decim(-0.9,0.9), Misc::rand::get().decim(-0.9,0.9)},
+    alphas{Misc::rand::get().decim(2*M_PI), Misc::rand::get().decim(2*M_PI), Misc::rand::get().decim(2*M_PI)}
 {
     setShaders();
 }

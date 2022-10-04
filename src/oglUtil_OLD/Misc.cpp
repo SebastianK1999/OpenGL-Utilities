@@ -16,12 +16,12 @@ Misc::rand& Misc::rand::get(){ return Misc::rand::staticRand; }
 void Misc::rand::setSeed(size_t arg_seed){ 
     Misc::rand::get().seed = arg_seed;
     std::mt19937 gen(arg_seed);
-    Misc::rand::get().generator = gen;
+    Misc::rand().generator = gen;
 }
 
 void Misc::rand::rmSeed(){
-    std::mt19937 gen(Misc::rand::get().rd());
-    Misc::rand::get().generator = gen;
+    std::mt19937 gen(Misc::rand().rd());
+    Misc::rand().generator = gen;
 }
 
 int Misc::rand::binary(){
@@ -41,12 +41,12 @@ int Misc::rand::randInt(int n,int N){
 }
 
 // rand double
-double Misc::rand::Decim(){
+double Misc::rand::decim(){
     return this->disZeroOneDouble(this->generator);
 }
-double Misc::rand::Decim(double n, double N){
+double Misc::rand::decim(double n, double N){
     return this->disZeroOneDouble(this->generator) * (N-n) + n;
 }
-double Misc::rand::Decim(double N){
-    return this->Decim(0,N);
+double Misc::rand::decim(double N){
+    return this->decim(0,N);
 }

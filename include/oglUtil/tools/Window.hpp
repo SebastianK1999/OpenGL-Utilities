@@ -50,6 +50,7 @@ namespace oglu
         bool isFullScreen() const ;
         void setFullScreen(const bool fullscreen, const bool fullscreenLastMonitor = false);
         void switchFullScreen(const bool fullscreenLastMonitor = false);
+        void destroy();
         GLFWwindow* getGlfwWindowPtr() const;
         
         virtual void mainLoop();

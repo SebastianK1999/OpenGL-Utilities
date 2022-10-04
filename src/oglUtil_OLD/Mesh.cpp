@@ -83,6 +83,38 @@ Mesh::Mesh(Mesh&& other) noexcept
     setBuffers();
 }
 
+Mesh& Mesh::operator=(const Mesh& other) noexcept
+{   
+	meshPath = other.meshPath;
+	texturePath = other.texturePath;
+	vsPath = other.vsPath;
+	fsPath = other.fsPath;
+	primaryColor = other.primaryColor;
+	vertex_buffer_data = other.vertex_buffer_data;
+	uvs_buffer_data = other.uvs_buffer_data;
+	normal_buffer_data = other.normal_buffer_data;
+	texture = other.texture;
+	shader = other.shader;
+    setBuffers();
+	return *this;
+}
+
+Mesh& Mesh::operator=(Mesh&& other) noexcept
+{   
+	meshPath = std::move(other.meshPath);
+	texturePath = std::move(other.texturePath);
+	vsPath = std::move(other.vsPath);
+	fsPath = std::move(other.fsPath);
+	primaryColor = std::move(other.primaryColor);
+	vertex_buffer_data = std::move(other.vertex_buffer_data);
+	uvs_buffer_data = std::move(other.uvs_buffer_data);
+	normal_buffer_data = std::move(other.normal_buffer_data);
+	texture = std::move(other.texture);
+	shader = std::move(other.shader);
+	setBuffers();
+	return *this;
+}
+
 bool Mesh::loadOBJ(const char * path, std::vector<glm::vec3> & out_vertices, std::vector<glm::vec2> & out_uvs, std::vector<glm::vec3> & out_normals){
     	if constexpr (LOG_RESOURCE_LOADING) printf("Loading OBJ file %s...\n", path);
 
@@ -380,8 +412,14 @@ GLuint Mesh::LoadShaders(const char * vertex_file_path,const char * fragment_fil
 }
 
 void Mesh::setShader(const std::string& _path){
-    vsPath = _path;
-    fsPath = _path;
+	int dirname_length;
+    int length = wai_getExecutablePath(NULL, 0, NULL);
+    std::string exePath(length, '\0');
+    wai_getExecutablePath(&exePath[0], length, &dirname_length);
+    std::string dirPath(exePath.c_str(), static_cast<std::size_t>(dirname_length)+1);
+
+    vsPath = dirPath + _path;
+    fsPath = dirPath + _path;
     if(vsPath.back() != '/'){
         vsPath.append("/");
         fsPath.append("/");
@@ -460,4 +498,12 @@ void Mesh::draw(const glm::mat4& MVP, const glm::vec3& light) const {
     glUniform3f(4, light.x, light.y, light.z);
     glUniform3f(5, primaryColor.x, primaryColor.y, primaryColor.z);
     glDrawArrays(GL_TRIANGLES, 0, vertex_buffer_data.size());
+}
+
+void Mesh::reinitialize(){
+	glGenVertexArrays(1, &(vaoId));
+	bindProgram();
+	setShader("../res/shaders/mesh/");
+	setBuffers();
+	loadBMP(texturePath.c_str());
 }

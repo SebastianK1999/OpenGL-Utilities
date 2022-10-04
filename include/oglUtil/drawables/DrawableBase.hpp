@@ -56,7 +56,7 @@ namespace oglu
         void bindProgram() const;
         GLuint getProgramId() const;
 
-        private:
+        protected:
         GLuint vaoId;       // Vertex Array Objects
         GLuint vboId;       // Vertex Buffer Objects
         GLuint eboId;       // Element Buffer Objects

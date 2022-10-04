@@ -137,6 +137,14 @@ void oglu::Window::switchFullScreen(const bool fullscreenLastMonitor){
     setFullScreen(! isFullScreen(), fullscreenLastMonitor);
 }
 
+void oglu::Window::destroy(){
+    static bool destroyed = false;
+    if(!destroyed){
+        glfwDestroyWindow(getGlfwWindowPtr());
+        destroyed = true;
+    }
+}
+
 GLFWwindow* oglu::Window::getGlfwWindowPtr() const {
     return glfwWindowPtr;
 }
