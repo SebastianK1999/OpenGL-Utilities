@@ -43,10 +43,15 @@ void MainWindow::mainFunction(){
     int countBtn;
     const float* axes = glfwGetJoystickAxes(GLFW_JOYSTICK_1, &countAx);
     const unsigned char* buttons = glfwGetJoystickButtons(GLFW_JOYSTICK_1, &countBtn);
+    for(int joystick = GLFW_JOYSTICK_1; joystick<=GLFW_JOYSTICK_LAST; joystick++) {
+        if(glfwJoystickPresent(joystick)){
+            std::cout << "joystick : " << joystick << " present\n";
+        }
+    }
+    std::cout << countAx << " " << countBtn << "\n";
     if(countAx > 0){
         for(int i = 0; i < countAx; i++){
             std::cout<< "ax[" << i << "]:" << std::setfill('0') << std::setw(10) << std::left << axes[i] << "\t";
-            
         }
     }
     std::cout << "\r\n";
