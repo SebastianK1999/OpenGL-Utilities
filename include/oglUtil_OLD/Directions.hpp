@@ -1,7 +1,7 @@
 #ifndef DIRECTIONS_INCLUDED
 #define DIRECTIONS_INCLUDED
 
-#include "oglUtil/drawables/Drawable.hpp"
+#include "oglUtil/drawableSystem/Drawable.hpp"
 
 #include <GL/glew.h>
 #include <glm/glm.hpp>

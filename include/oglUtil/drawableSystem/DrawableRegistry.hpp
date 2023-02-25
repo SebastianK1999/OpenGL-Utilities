@@ -1,7 +1,7 @@
 /*
 * MIT License
 * 
-* Copyright (c) 2022 Sebastian Kwaśniak
+* Copyright (c) 2023 Sebastian Kwaśniak
 * 
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -25,12 +25,32 @@
 
 #pragma once
 
-#include "oglUtil/drawableSystem/Drawable.hpp"
+#include <map>
+#include <memory>
+#include <string>
+
+#include "oglUtil/drawableSystem/RegisteredDrawable.hpp"
 
 namespace oglu
 {
-    class Sphere : public virtual oglu::Drawable
+    class DrawableRegistry
     {
+    public:
+        static bool hasRegistry(const std::string& key);
+        static std::shared_ptr<oglu::RegisteredDrawable> getRegistry(const std::string& key);
+        static std::shared_ptr<oglu::RegisteredDrawable> registerDrawable
+        (
+            const std::string& key,
+            const std::vector<glm::vec3>& vertexBuffer,
+            const std::vector<glm::vec4>& vertexColorBuffer,
+            const std::vector<glm::vec3>& normalBuffer,
+            const std::string& vertexShader,
+            const std::string& fragmentShader
+        );
+        static void drawInstances(const std::string& key, const glm::mat4& MVP, const glm::vec3& light);
+    private:
+        static std::map<std::string, std::shared_ptr<oglu::RegisteredDrawable>> registeredDrawables;
+        DrawableRegistry() = delete;
 
     };
 }

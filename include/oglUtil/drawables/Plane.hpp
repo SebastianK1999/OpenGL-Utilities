@@ -25,7 +25,7 @@
 
 #pragma once
 
-#include "oglUtil/drawables/Drawable.hpp"
+#include "oglUtil/drawableSystem/Drawable.hpp"
 
 namespace oglu
 {

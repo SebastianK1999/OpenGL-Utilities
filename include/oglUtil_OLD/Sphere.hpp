@@ -1,7 +1,7 @@
 #ifndef SPHERE_INCLUDED
 #define SPHERE_INCLUDED
 
-#include "oglUtil/drawables/DrawableBase.hpp"
+#include "oglUtil/drawableSystem/DrawableBase.hpp"
 
 #include <glm/glm.hpp>
 

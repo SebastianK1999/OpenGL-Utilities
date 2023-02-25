@@ -35,6 +35,8 @@
 
 #pragma once
 
+#include <vector>
+
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 
@@ -49,20 +51,26 @@ namespace oglu
         DrawableBase& operator=(DrawableBase&& other) noexcept;
         virtual ~DrawableBase();
         DrawableBase(const GLuint pid=0);
-        int compileShaders(const char*const vs, const char*const fs, const char*const gs=NULL);
-        int compileShadersFromFile(const char*const vs, const char*const fs, const char*const gs=NULL);
-        void bindVAO() const;
-        void bindBuffers() const;
-        void bindProgram() const;
-        GLuint getProgramId() const;
 
-        protected:
+    protected:
         GLuint vaoId;       // Vertex Array Objects
         GLuint vboId;       // Vertex Buffer Objects
         GLuint eboId;       // Element Buffer Objects
         GLuint programId;
-        GLint compileLink(const GLuint v, const char*const which, int prog=0) const;
+        int compileShaders(const char*const vs, const char*const fs, const char*const gs=NULL);
+        void bindBuffers() const;
+        void bindProgram() const;
+        template <glm::length_t L,typename T, glm::qualifier Q>
+        void setInstancesDataArray(const std::vector<glm::vec<L,T,Q>>& instancesDataArray, const unsigned int layoutAttribute);
+        template <glm::length_t L,typename T, glm::qualifier Q>
+        void setDrawableBuffer(const std::vector<glm::vec<L,T,Q>>& drawableBuffer, const unsigned int layoutAttribute);
+        GLuint getProgramId() const;
+    
+    private:
         int compileShaders(const GLuint v, const GLuint f, const GLuint g=0);
-        void getShaderSource(const GLuint sId, const char*const  file) const;
+        GLint compileLink(const GLuint v, const char*const which, int prog=0) const;
+
     };
 }
+
+#include "oglUtil/drawableSystem/DrawableBase.inl"

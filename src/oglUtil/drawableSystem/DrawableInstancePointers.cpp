@@ -1,7 +1,7 @@
 /*
 * MIT License
 * 
-* Copyright (c) 2022 Sebastian Kwaśniak
+* Copyright (c) 2023 Sebastian Kwaśniak
 * 
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -23,14 +23,18 @@
 */
 
 
-#pragma once
+#include <utility>
 
-#include "oglUtil/drawableSystem/Drawable.hpp"
+#include "oglUtil/drawableSystem/DrawableInstancePointers.hpp"
 
-namespace oglu
-{
-    class Sphere : public virtual oglu::Drawable
-    {
-
-    };
-}
+oglu::DrawableInstancePointers::DrawableInstancePointers(
+    glm::vec3* _positionPointer,
+    glm::vec3* _scalePointer,
+    glm::vec3* _rotationPointer,
+    glm::vec4* _colorPointer
+)
+: positionPointer(_positionPointer)
+, scalePointer(_scalePointer)
+, rotationPointer(_rotationPointer)
+, colorPointer(_colorPointer)
+{}

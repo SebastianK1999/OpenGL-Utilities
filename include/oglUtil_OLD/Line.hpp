@@ -1,7 +1,7 @@
 #ifndef LINE_INCLUDED
 #define LINE_INCLUDED
 
-#include "oglUtil/drawables/DrawableBase.hpp"
+#include "oglUtil/drawableSystem/DrawableBase.hpp"
 
 
 #include <stdlib.h>

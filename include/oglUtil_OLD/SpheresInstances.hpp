@@ -1,7 +1,7 @@
 #ifndef SPHERES_INSTANCES_INCLUDED
 #define SPHERES_INSTANCES_INCLUDED
 
-#include "oglUtil/drawables/DrawableBase.hpp"
+#include "oglUtil/drawableSystem/DrawableBase.hpp"
 
 #include "oglUtil_OLD/Misc.hpp"
 #include <glm/glm.hpp>

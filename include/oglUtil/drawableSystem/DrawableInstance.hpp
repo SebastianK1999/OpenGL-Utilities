@@ -26,32 +26,33 @@
 #pragma once
 
 #include <memory>
-#include <string>
 
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 
-#include "oglUtil/drawableSystem/DrawableInstance.hpp"
-#include "oglUtil/drawableSystem/DrawableInstancePointers.hpp"
 #include "oglUtil/drawableSystem/RegisteredDrawable.hpp"
+#include "oglUtil/drawableSystem/DrawableInstancePointers.hpp"
 
 namespace oglu
 {
-    class Cube : public oglu::DrawableInstance
+    class DrawableInstance
     {
     public:
-        static constexpr char key[] = "_oglu::Cube";
-        static std::shared_ptr<oglu::RegisteredDrawable> registryPointer;
-        // static draw(const glm::mat4& MVP, const glm::vec3& light);
-        oglu::RegisteredDrawable& getRegistry() const noexcept override;
-        Cube();
-        Cube(const Cube& other)             = default;
-        Cube(Cube&& other)                  = default;
-        Cube& operator=(const Cube& other)  = default;
-        Cube& operator=(Cube&& other)       = default;
-        virtual ~Cube()                     = default;
-
-    private:
+        glm::vec3& getPosition();
+        glm::vec3& getScale();
+        glm::vec3& getRotation();
+        glm::vec4& getColor();
+        // virtual oglu::RegisteredDrawable getInstance() const noexcept   = 0;
+        virtual oglu::RegisteredDrawable& getRegistry() const noexcept   = 0;
+        DrawableInstance()                                              = default;
+        DrawableInstance(const DrawableInstance& other)                 = default;
+        DrawableInstance(DrawableInstance&& other)                      = default;
+        DrawableInstance& operator=(const DrawableInstance& other)      = default;
+        DrawableInstance& operator=(DrawableInstance&& other)           = default;
+        virtual ~DrawableInstance()                                     = default;
+    
+    protected:
+        std::shared_ptr<oglu::DrawableInstancePointers> instancePointer;
 
     };
 }

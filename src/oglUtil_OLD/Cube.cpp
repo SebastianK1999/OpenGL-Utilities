@@ -162,7 +162,7 @@ void Cube::setBuffers() {
     );
 }
 
-void Cube::draw(glm::mat4& MVP) {
+void Cube::draw(const glm::mat4& MVP) {
     bindProgram();
     bindBuffers();
     glUniformMatrix4fv(0, 1, GL_FALSE, &MVP[0][0]);

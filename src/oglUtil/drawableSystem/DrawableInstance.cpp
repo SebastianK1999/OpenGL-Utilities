@@ -1,7 +1,7 @@
 /*
 * MIT License
 * 
-* Copyright (c) 2022 Sebastian Kwaśniak
+* Copyright (c) 2023 Sebastian Kwaśniak
 * 
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -23,14 +23,24 @@
 */
 
 
-#pragma once
+#include "oglUtil/drawableSystem/DrawableInstance.hpp"
 
-#include "oglUtil/drawableSystem/Drawable.hpp"
-
-namespace oglu
+glm::vec3& oglu::DrawableInstance::getPosition()
 {
-    class Sphere : public virtual oglu::Drawable
-    {
+    return *(instancePointer->positionPointer);
+}
 
-    };
+glm::vec3& oglu::DrawableInstance::getScale()
+{
+    return *(instancePointer->scalePointer);
+}
+
+glm::vec3& oglu::DrawableInstance::getRotation()
+{
+    return *(instancePointer->rotationPointer);
+}
+
+glm::vec4& oglu::DrawableInstance::getColor()
+{
+    return *(instancePointer->colorPointer);
 }

@@ -33,7 +33,7 @@
 //===========================================================================
 
 
-#include "oglUtil/drawables/DrawableBase.hpp"
+#include "oglUtil/drawableSystem/DrawableBase.hpp"
 #include <algorithm>
 #include <iostream>
 #include <fstream>
@@ -109,26 +109,8 @@ int oglu::DrawableBase::compileShaders(const char*const vs, const char*const fs,
     if (gs) glShaderSource(g, 1, &gs, NULL);   // ...
 
     int res = compileShaders(v,f,g);
-    glUseProgram(getProgramId());
+    glUseProgram(programId);
     return res;
-}
-
-int oglu::DrawableBase::compileShadersFromFile(const char*const vs, const char*const fs, const char*const gs) {
-   GLuint  v = glCreateShader(GL_VERTEX_SHADER);
-   GLuint  f = glCreateShader(GL_FRAGMENT_SHADER);
-   GLuint  g = 0;
-   if (gs) g = glCreateShader(GL_GEOMETRY_SHADER);
-   getShaderSource(v, vs);
-   getShaderSource(f, fs);
-   if (gs) getShaderSource(g, gs);
-
-   int res = compileShaders(v,f,g);
-   glUseProgram(getProgramId());
-   return res;
-}
-
-void oglu::DrawableBase::bindVAO() const {
-   glBindVertexArray(vaoId);
 }
 
 void oglu::DrawableBase::bindBuffers() const {
@@ -139,10 +121,6 @@ void oglu::DrawableBase::bindBuffers() const {
    
 void oglu::DrawableBase::bindProgram() const {
    glUseProgram(programId);
-}
-
-GLuint oglu::DrawableBase:: getProgramId() const {
-   return programId;
 }
 
 int oglu::DrawableBase::compileShaders(const GLuint v, const GLuint f, const GLuint g) {
@@ -184,21 +162,6 @@ GLint oglu::DrawableBase::compileLink(const GLuint v, const char*const which, in
    }
    return Result;
 }
-void oglu::DrawableBase::getShaderSource(const GLuint sId, const char*const  file) const {
-      std::string sCode;
-      std::ifstream sStream(file, std::ios::in);
-      if(sStream.is_open()) {
-         std::string Line = "";
-         while(getline(sStream, Line))
-            sCode += "\n" + Line;
-         sStream.close();
-      } else {
-         printf("Error opening file:  %s !\n", file);
-         getchar();
-         return;
-      }
-      char const * SourcePointer = sCode.c_str();
-      glShaderSource(sId, 1, &SourcePointer , NULL);
-}
+
 
    

@@ -33,8 +33,6 @@
  #include <oglUtil/tools/Window.hpp> 
 
  #include <oglUtil/drawables/Cube.hpp> 
- #include <oglUtil/drawables/Drawable.hpp> 
- #include <oglUtil/drawables/DrawableBase.hpp> 
  #include <oglUtil/drawables/Plane.hpp> 
  #include <oglUtil/drawables/Sphere.hpp> 
 

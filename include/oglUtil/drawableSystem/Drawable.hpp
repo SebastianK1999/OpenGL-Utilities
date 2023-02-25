@@ -23,45 +23,29 @@
 */
 
 
-#include "oglUtil/drawables/Drawable.hpp"
-#include <utility>
-#include <iostream>
+#pragma once
 
-oglu::Drawable::Drawable(const Drawable& other) noexcept 
-: DrawableBase(other)
-, position(other.position)
-, scale(other.scale)
-, rotation(other.rotation)
-{}
+#include <glm/glm.hpp>
+#include "oglUtil/drawableSystem/DrawableBase.hpp"
 
-oglu::Drawable::Drawable(Drawable&& other) noexcept 
-: DrawableBase(std::move(other))            // have no idea why it calls default constructor
-, position(std::move(other.position))
-, scale(std::move(other.scale))
-, rotation(std::move(other.rotation))
-{}
+namespace oglu 
+{
+    class Drawable : public virtual DrawableBase
+    {
+    public:
+        glm::vec4 position;
+        glm::vec4 scale;
+        glm::vec4 rotation;
 
-oglu::Drawable& oglu::Drawable::operator=(const Drawable& other) noexcept {
-    position = other.position;
-    scale = other.scale;
-    rotation = other.rotation;
-    return *this;
+        Drawable(const Drawable& other) noexcept;
+        Drawable(Drawable&& other) noexcept;
+        Drawable& operator=(const Drawable& other) noexcept;
+        Drawable& operator=(Drawable&& other) noexcept;
+        virtual ~Drawable();
+        Drawable();
+        //virtual void draw();
+
+    private:
+
+    };
 }
-
-oglu::Drawable& oglu::Drawable::operator=(Drawable&& other) noexcept {
-    if (this != &other) {
-        position = std::move(other.position);
-        scale = std::move(other.scale);
-        rotation = std::move(other.rotation);
-    }
-    return *this;
-}
-
-oglu::Drawable::~Drawable() {}
-
-oglu::Drawable::Drawable()
-: DrawableBase()
-, position(0,0,0,0)
-, scale(1,1,1,1)
-, rotation(0,0,0,0)
-{}

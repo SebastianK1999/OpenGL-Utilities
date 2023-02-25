@@ -1,7 +1,7 @@
 /*
 * MIT License
 * 
-* Copyright (c) 2022 Sebastian Kwaśniak
+* Copyright (c) 2023 Sebastian Kwaśniak
 * 
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -25,27 +25,26 @@
 
 #pragma once
 
-#include <glm/glm.hpp>
-#include "oglUtil/drawables/DrawableBase.hpp"
+#include <memory>
 
-namespace oglu 
+#include <GL/glew.h>
+#include <glm/glm.hpp>
+
+namespace oglu
 {
-    class Drawable : public virtual DrawableBase
+    class DrawableInstancePointers
     {
     public:
-        glm::vec4 position;
-        glm::vec4 scale;
-        glm::vec4 rotation;
-
-        Drawable(const Drawable& other) noexcept;
-        Drawable(Drawable&& other) noexcept;
-        Drawable& operator=(const Drawable& other) noexcept;
-        Drawable& operator=(Drawable&& other) noexcept;
-        virtual ~Drawable();
-        Drawable();
-        //virtual void draw();
-
-    private:
-
+        glm::vec3* positionPointer;
+        glm::vec3* scalePointer;
+        glm::vec3* rotationPointer;
+        glm::vec4* colorPointer;
+        DrawableInstancePointers
+        (
+            glm::vec3* positionPointer,
+            glm::vec3* scalePointer,
+            glm::vec3* rotationPointer,
+            glm::vec4* colorPointer
+        );
     };
 }

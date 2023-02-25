@@ -1,7 +1,7 @@
 #ifndef CUBE_INCLUDED
 #define CUBE_INCLUDED
 
-#include "oglUtil/drawables/DrawableBase.hpp"
+#include "oglUtil/drawableSystem/DrawableBase.hpp"
 
 #include <GL/glew.h>
 #include <glm/glm.hpp>
@@ -20,7 +20,7 @@ public:
     Cube();
     void setShaders();
     void setBuffers();
-    void draw(glm::mat4& MVP);
+    void draw(const glm::mat4& MVP);
     void setColor(float r, float g, float b);
  private:
     static const GLfloat g_vertex_buffer_data[];

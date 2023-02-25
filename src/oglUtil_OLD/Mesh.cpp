@@ -345,6 +345,10 @@ GLuint Mesh::LoadShaders(const char * vertex_file_path,const char * fragment_fil
 		sstr << FragmentShaderStream.rdbuf();
 		FragmentShaderCode = sstr.str();
 		FragmentShaderStream.close();
+	}else{
+		if constexpr (LOG_RESOURCE_LOADING) printf("Impossible to open %s. Are you in the right directory ? Don't forget to read the FAQ !\n", fragment_file_path);
+		getchar();
+		return 0;
 	}
 
 	GLint Result = GL_FALSE;
@@ -507,3 +511,4 @@ void Mesh::reinitialize(){
 	setBuffers();
 	loadBMP(texturePath.c_str());
 }
+

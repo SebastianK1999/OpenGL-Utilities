@@ -1,7 +1,7 @@
 #ifndef MESH_INCLUDED
 #define MESH_INCLUDED
 
-#include "oglUtil/drawables/Drawable.hpp"
+#include "oglUtil/drawableSystem/Drawable.hpp"
 
 #include <glm/glm.hpp>
 
