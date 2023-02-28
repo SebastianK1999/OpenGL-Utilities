@@ -1,7 +1,7 @@
 /*
 * MIT License
 * 
-* Copyright (c) 2022 Sebastian Kwaśniak
+* Copyright (c) 2023 Sebastian Kwaśniak
 * 
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -27,12 +27,23 @@
 
 // Include all utilities
  #include <oglUtil/tools/Camera.hpp> 
+ #include <oglUtil/tools/FileReader.hpp> 
  #include <oglUtil/tools/KeyTracker.hpp> 
  #include <oglUtil/tools/MouseTracker.hpp> 
  #include <oglUtil/tools/OgluFunctions.hpp> 
  #include <oglUtil/tools/Window.hpp> 
 
  #include <oglUtil/drawables/Cube.hpp> 
+ #include <oglUtil/drawables/Mesh.hpp> 
  #include <oglUtil/drawables/Plane.hpp> 
  #include <oglUtil/drawables/Sphere.hpp> 
+
+ #include <oglUtil/drawableSystem/Drawable.hpp> 
+ #include <oglUtil/drawableSystem/DrawableBase.hpp> 
+ #include <oglUtil/drawableSystem/DrawableInstance.hpp> 
+ #include <oglUtil/drawableSystem/DrawableInstancePointers.hpp> 
+ #include <oglUtil/drawableSystem/DrawableRegistry.hpp> 
+ #include <oglUtil/drawableSystem/RegisteredDrawable.hpp> 
+ #include <oglUtil/drawableSystem/ShaderCollection.hpp> 
+ #include <oglUtil/drawableSystem/ShaderLayoutEnums.hpp> 
 

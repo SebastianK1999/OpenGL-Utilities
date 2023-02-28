@@ -1,7 +1,7 @@
 /*
 * MIT License
 * 
-* Copyright (c) 2022 Sebastian Kwaśniak
+* Copyright (c) 2023 Sebastian Kwaśniak
 * 
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -25,12 +25,37 @@
 
 #pragma once
 
-#include "oglUtil/drawableSystem/Drawable.hpp"
+#include <memory>
+#include <vector>
+
+#include <GL/glew.h>
+#include <glm/glm.hpp>
+
+#include "oglUtil/drawableSystem/DrawableInstance.hpp"
+#include "oglUtil/drawableSystem/DrawableInstancePointers.hpp"
+#include "oglUtil/drawableSystem/RegisteredDrawable.hpp"
 
 namespace oglu
 {
-    class Sphere : public virtual oglu::Drawable
+    class Sphere : public oglu::DrawableInstance
     {
+    public:
+        static unsigned int levelOfDetail;
+        static constexpr char key[] = "_oglu::Sphere";
+        static const std::vector<glm::vec3> generateMesh();
+        static const std::vector<glm::vec3> generateNormals(const std::vector<glm::vec3>& vertexBuffer);
+        static void drawInstances(const glm::mat4& MVP, const glm::vec3& light);
+        // static draw(const glm::mat4& MVP, const glm::vec3& light);
+        oglu::RegisteredDrawable& getRegistry() const noexcept override;
+        Sphere();
+        Sphere(const Sphere& other)             = default;
+        Sphere(Sphere&& other)                  = default;
+        Sphere& operator=(const Sphere& other)  = default;
+        Sphere& operator=(Sphere&& other)       = default;
+        virtual ~Sphere()                       = default;
+
+    private:
+        static std::shared_ptr<oglu::RegisteredDrawable> registryPointer;
 
     };
 }

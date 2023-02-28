@@ -1,7 +1,7 @@
 /*
 * MIT License
 * 
-* Copyright (c) 2022 Sebastian Kwaśniak
+* Copyright (c) 2023 Sebastian Kwaśniak
 * 
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -159,15 +159,11 @@ void oglu::Window::mainLoop(){
 
 void oglu::Window::renderWindow(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    printErrorsDbg("glClear");
     keyTracker.update(glfwWindowPtr);
     mainFunction();
-    printErrorsDbg("mainFunction");
     drawFunction();
-    printErrorsDbg("drawFunction");
     glfwSwapBuffers(getGlfwWindowPtr()); // Swap buffers
     glfwPollEvents();
-    printErrorsDbg("glfwSwapBuffers or glfwPollEvents");
 }
 
 void oglu::Window::mainFunction(){

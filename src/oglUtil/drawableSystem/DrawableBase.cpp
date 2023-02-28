@@ -1,7 +1,7 @@
 /*
 * MIT License
 * 
-* Copyright (c) 2022 Sebastian Kwaśniak
+* Copyright (c) 2023 Sebastian Kwaśniak
 * 
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -99,7 +99,13 @@ oglu::DrawableBase::DrawableBase(const GLuint _pId)
    // glGenBuffers(     1, &eboId);
 }
 
-int oglu::DrawableBase::compileShaders(const char*const vs, const char*const fs, const char*const gs) {
+void oglu::DrawableBase::compileShaders
+(
+   const char*const vs,
+   const char*const fs,
+   const char*const gs
+)
+{
     GLuint  v = glCreateShader(GL_VERTEX_SHADER);
     GLuint  f = glCreateShader(GL_FRAGMENT_SHADER);
     GLuint  g = 0;
@@ -108,36 +114,47 @@ int oglu::DrawableBase::compileShaders(const char*const vs, const char*const fs,
     glShaderSource(f, 1, &fs, NULL);   // ...
     if (gs) glShaderSource(g, 1, &gs, NULL);   // ...
 
-    int res = compileShaders(v,f,g);
+    shaderId = compileShaders(v,f,g);
     glUseProgram(programId);
-    return res;
 }
 
-void oglu::DrawableBase::bindBuffers() const {
-   glBindVertexArray(            vaoId);
-   glBindBuffer(GL_ARRAY_BUFFER, vboId);
-   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboId);
+void oglu::DrawableBase::bindTexture() const
+{
+   glBindTexture(GL_TEXTURE_2D, textureId);
 }
-   
-void oglu::DrawableBase::bindProgram() const {
+
+void oglu::DrawableBase::bindProgram() const
+{
    glUseProgram(programId);
 }
 
-int oglu::DrawableBase::compileShaders(const GLuint v, const GLuint f, const GLuint g) {
-    GLint Result = GL_FALSE;
-    if (g) Result = compileLink(g, "GS");
-    if ( (Result=compileLink(v, "VS")) )
-        if ( compileLink(f, "FS") ) {
-        programId = glCreateProgram();
-        glAttachShader(programId,v);
-        glAttachShader(programId,f);
-        if (g) glAttachShader(programId,g);
-        compileLink(programId, "Linking",  3);
-        }
-    glDeleteShader(v);
-    glDeleteShader(f);
-    if (g) glDeleteShader(g);
-    return Result;
+void oglu::DrawableBase::bindBuffers() const
+{
+   glBindVertexArray(            vaoId);
+   glBindBuffer(GL_ARRAY_BUFFER, vboId);
+   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboId);
+}   
+
+void oglu::DrawableBase::removeProgram() const
+{
+   glDeleteShader(programId);
+}
+
+GLuint oglu::DrawableBase::compileShaders(const GLuint v, const GLuint f, const GLuint g) {
+   GLint Result = GL_FALSE; // TODO - bool or remove
+   if (g) Result = compileLink(g, "GS");
+   if ( (Result=compileLink(v, "VS")) )
+      if ( compileLink(f, "FS") ) {
+      programId = glCreateProgram();
+      glAttachShader(programId,v);
+      glAttachShader(programId,f);
+      if (g) glAttachShader(programId,g);
+      compileLink(programId, "Linking",  3);
+      }
+   glDeleteShader(v);
+   glDeleteShader(f);
+   if (g) glDeleteShader(g);
+   return Result;
 }
 
 GLint oglu::DrawableBase::compileLink(const GLuint v, const char*const which, int prog) const {
@@ -163,5 +180,44 @@ GLint oglu::DrawableBase::compileLink(const GLuint v, const char*const which, in
    return Result;
 }
 
-
-   
+void oglu::DrawableBase::compileTexture
+(
+   const std::vector<unsigned char>& textureData,
+   const unsigned int width,
+   const unsigned int height
+)
+{
+	glGenTextures(1, &textureId);
+	// "Bind" the newly created texture : all future texture functions will modify this texture
+	glBindTexture(GL_TEXTURE_2D, textureId);
+   glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,GL_MODULATE );
+	// Give the image to OpenGL
+   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glTexImage2D
+   (
+      GL_TEXTURE_2D,
+      0,
+      GL_RGB,
+      width,
+      height,
+      0,
+      GL_BGR,
+      GL_UNSIGNED_BYTE,
+      textureData.data()
+   );
+   constexpr bool poorFilter = false; // poor means sharp pixels
+   if constexpr (poorFilter)
+   {
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); 
+   }
+   else
+   {
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+   }
+	glGenerateMipmap(GL_TEXTURE_2D);
+}
+        

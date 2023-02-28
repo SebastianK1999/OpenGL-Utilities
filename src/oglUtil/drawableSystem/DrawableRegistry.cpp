@@ -42,11 +42,15 @@ std::shared_ptr<oglu::RegisteredDrawable> oglu::DrawableRegistry::getRegistry(co
 std::shared_ptr<oglu::RegisteredDrawable> oglu::DrawableRegistry::registerDrawable
 (
     const std::string& key,
-    const std::vector<glm::vec3>& vertexBuffer,
-    const std::vector<glm::vec4>& vertexColorBuffer,
-    const std::vector<glm::vec3>& normalBuffer,
-    const std::string& vertexShader,
-    const std::string& fragmentShader
+    const std::vector<glm::vec3> vertexBuffer,
+    const std::vector<glm::vec4> vertexColorBuffer,
+    const std::vector<glm::vec3> normalBuffer,
+    const std::vector<glm::vec2> uvBuffer,
+    const std::vector<unsigned char> textureData,
+    const unsigned int textureWidth,
+    const unsigned int textureHeight,
+    const oglu::VertexShader& vertexShaderCode,
+    const oglu::FragmentShader& fragmentShaderCode
 )
 {
     if(!hasRegistry(key)){
@@ -58,8 +62,12 @@ std::shared_ptr<oglu::RegisteredDrawable> oglu::DrawableRegistry::registerDrawab
             vertexBuffer,
             vertexColorBuffer,
             normalBuffer,
-            vertexShader,
-            fragmentShader
+            uvBuffer,
+            textureData,
+            textureWidth,
+            textureHeight,
+            vertexShaderCode,
+            fragmentShaderCode
         )));
     }
     return getRegistry(key);

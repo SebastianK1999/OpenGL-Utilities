@@ -43,7 +43,7 @@ namespace oglu
         glm::vec3& getRotation();
         glm::vec4& getColor();
         // virtual oglu::RegisteredDrawable getInstance() const noexcept   = 0;
-        virtual oglu::RegisteredDrawable& getRegistry() const noexcept   = 0;
+        virtual oglu::RegisteredDrawable& getRegistry() const noexcept  = 0;
         DrawableInstance()                                              = default;
         DrawableInstance(const DrawableInstance& other)                 = default;
         DrawableInstance(DrawableInstance&& other)                      = default;

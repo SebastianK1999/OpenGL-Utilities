@@ -1,7 +1,7 @@
 /*
 * MIT License
 * 
-* Copyright (c) 2022 Sebastian Kwaśniak
+* Copyright (c) 20233 Sebastian Kwaśniak
 * 
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -23,5 +23,63 @@
 */
 
 
+#include <vector>
+
+#include "oglUtil/drawableSystem/DrawableRegistry.hpp"
+#include "oglUtil/drawableSystem/ShaderCollection.hpp"
+
 #include "oglUtil/drawables/Plane.hpp"
+
+static const std::vector<glm::vec3> gs_VertexBuffer = { 
+    glm::vec3( 0.5f, 0.5f, 0.5f),
+    glm::vec3(-0.5f, 0.5f, 0.5f),
+    glm::vec3( 0.5f,-0.5f, 0.5f),
+
+    glm::vec3(-0.5f,-0.5f, 0.5f),
+    glm::vec3( 0.5f,-0.5f, 0.5f),
+    glm::vec3(-0.5f, 0.5f, 0.5f),
+};
+
+static const std::vector<glm::vec3> gs_NormalBuffer = { 
+    glm::vec3(0.0f, 0.0f, 1.0f),
+    glm::vec3(0.0f, 0.0f, 1.0f),
+    glm::vec3(0.0f, 0.0f, 1.0f),
+
+    glm::vec3(0.0f, 0.0f, 1.0f),
+    glm::vec3(0.0f, 0.0f, 1.0f),
+    glm::vec3(0.0f, 0.0f, 1.0f),
+};
+
+std::shared_ptr<oglu::RegisteredDrawable> oglu::Plane::registryPointer = nullptr;
+
+void oglu::Plane::drawInstances(const glm::mat4& MVP, const glm::vec3& light)
+{
+    registryPointer->drawInstances(MVP, light);
+}
+
+oglu::RegisteredDrawable& oglu::Plane::getRegistry() const noexcept 
+{
+    return *(registryPointer);
+}
+
+oglu::Plane::Plane()
+{
+    if(registryPointer == nullptr)
+    {
+        registryPointer = oglu::DrawableRegistry::registerDrawable
+        (
+            oglu::Plane::key,
+            gs_VertexBuffer,
+            {},
+            gs_NormalBuffer,
+            {},
+            {},
+            0,
+            0,
+            oglu::ShaderCollection::basicVertexShader,
+            oglu::ShaderCollection::basicFragmentShader
+        );
+    }
+    instancePointer = registryPointer->addInstance();
+}
 

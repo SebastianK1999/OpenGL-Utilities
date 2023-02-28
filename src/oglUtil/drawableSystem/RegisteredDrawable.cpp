@@ -26,8 +26,14 @@
 #include <iostream>
 
 #include "oglUtil/tools/OgluFunctions.hpp"
+#include "oglUtil/tools/FileReader.hpp"
+#include "oglUtil/drawableSystem/ShaderLayoutEnums.hpp"
 
 #include "oglUtil/drawableSystem/RegisteredDrawable.hpp"
+
+std::string oglu::RegisteredDrawable::vertexShaderFileName = "shader.vs";
+
+std::string oglu::RegisteredDrawable::fragmentShaderFileName = "shader.fs";
 
 std::shared_ptr<oglu::DrawableInstancePointers> oglu::RegisteredDrawable::addInstance()
 {
@@ -55,24 +61,39 @@ void oglu::RegisteredDrawable::reserve(const unsigned int numberOfNewInstances)
     instances.reserve(instances.capacity() + numberOfNewInstances);
 }
 
-oglu::RegisteredDrawable::RegisteredDrawable(
-    const std::string& _key,
-    const std::vector<glm::vec3> _vertexBuffer,
-    const std::vector<glm::vec4> _vertexColorBuffer,
-    const std::vector<glm::vec3> _normalBuffer,
-    const std::string& _vertexShaderCode,
-    const std::string& _fragmentShaderCode
+oglu::RegisteredDrawable::RegisteredDrawable
+(
+    const std::string& arg_key,
+    const std::vector<glm::vec3> arg_vertexBuffer,
+    const std::vector<glm::vec4> arg_vertexColorBuffer,
+    const std::vector<glm::vec3> arg_normalBuffer,
+    const std::vector<glm::vec2> arg_uvBuffer,
+    const std::vector<unsigned char> arg_textureData,
+    const unsigned int arg_textureWidth,
+    const unsigned int arg_textureHeight,
+    const oglu::VertexShader& arg_vertexShaderCode,
+    const oglu::FragmentShader& arg_fragmentShaderCode
 )
 : oglu::DrawableBase()
-, key(_key)
-, vertexBuffer(_vertexBuffer)
-, vertexColorBuffer(_vertexColorBuffer)
-, normalBuffer(_normalBuffer)
-, vertexShaderCode(_vertexShaderCode)
-, fragmentShaderCode(_fragmentShaderCode)
+, key(arg_key)
+, vertexBuffer(arg_vertexBuffer)
+, vertexColorBuffer(arg_vertexColorBuffer)
+, normalBuffer(arg_normalBuffer)
+, uvBuffer(arg_uvBuffer)
+, textureData(arg_textureData)
+, textureWidth(arg_textureWidth)
+, textureHeight(arg_textureHeight)
+, vertexShaderCode(arg_vertexShaderCode)
+, fragmentShaderCode(arg_fragmentShaderCode)
 {
+    setTexture();
     setShaders();
     setBuffers();
+}
+
+void oglu::RegisteredDrawable::setTexture()
+{
+    compileTexture(textureData, textureWidth, textureHeight);
 }
 
 void oglu::RegisteredDrawable::setShaders()
@@ -80,23 +101,56 @@ void oglu::RegisteredDrawable::setShaders()
     compileShaders(vertexShaderCode.c_str(), fragmentShaderCode.c_str());
 }
 
+void oglu::RegisteredDrawable::loadShaders(const std::filesystem::path& shadersDirectory)
+{
+    oglu::VertexShader vertexShaderCode = oglu::FileReader::readFileContent(shadersDirectory / oglu::RegisteredDrawable::vertexShaderFileName);
+    oglu::FragmentShader fragmentShaderCode = oglu::FileReader::readFileContent(shadersDirectory / oglu::RegisteredDrawable::fragmentShaderFileName);
+    loadShaders
+    (
+        oglu::ShaderCollection::vertexShaderLayouts + oglu::ShaderCollection::vertexShaderFunctions + vertexShaderCode,
+        oglu::ShaderCollection::fragmentShaderLayouts + fragmentShaderCode
+    );
+}
+
+void oglu::RegisteredDrawable::loadShaders
+(
+    const oglu::VertexShader& vertexShaderCode,
+    const oglu::FragmentShader& fragmentShaderCode
+)
+{
+    removeProgram();
+    compileShaders(vertexShaderCode.c_str(), fragmentShaderCode.c_str());
+}
+
 void oglu::RegisteredDrawable::setBuffers() {
     bindBuffers();
 
-    setDrawableBuffer(vertexBuffer,0);
-    setDrawableBuffer(vertexColorBuffer,1);
-    setDrawableBuffer(normalBuffer,2);
+    setDrawableBuffer(vertexBuffer, oglu::EShaderBufferLayout::vertex);
+    
+    if (vertexBuffer.size() == vertexColorBuffer.size())
+    {
+        setDrawableBuffer(vertexColorBuffer,oglu::EShaderBufferLayout::vertexColor);
+    }
+    if (vertexBuffer.size() == normalBuffer.size())
+    {
+        setDrawableBuffer(normalBuffer, oglu::EShaderBufferLayout::normal);
+    }
+    if (vertexBuffer.size() == uvBuffer.size())
+    {
+        setDrawableBuffer(uvBuffer, oglu::EShaderBufferLayout::uv);
+    }  
 }
 
 void oglu::RegisteredDrawable::drawInstances(const glm::mat4& MVP, const glm::vec3& light)
 {
+    bindTexture();
     bindProgram();
     bindBuffers();
 
-    setInstancesDataArray(instancePositions, 3);
-    setInstancesDataArray(instanceScales, 4);
-    setInstancesDataArray(instanceRotations, 5);
-    setInstancesDataArray(instanceColors, 6);
+    setInstancesDataArray(instancePositions,oglu::EShaderBufferLayout::position);
+    setInstancesDataArray(instanceScales,   oglu::EShaderBufferLayout::scale);
+    setInstancesDataArray(instanceRotations,oglu::EShaderBufferLayout::rotation);
+    setInstancesDataArray(instanceColors,   oglu::EShaderBufferLayout::color);
 
     glUniformMatrix4fv(0, 1, GL_FALSE, &MVP[0][0]);
     glUniform3f(1, light[0], light[1], light[2]);

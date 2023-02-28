@@ -1,7 +1,7 @@
 /*
 * MIT License
 * 
-* Copyright (c) 2022 Sebastian Kwaśniak
+* Copyright (c) 2023 Sebastian Kwaśniak
 * 
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -27,6 +27,7 @@
 
 // Include tools
  #include <oglUtil/tools/Camera.hpp> 
+ #include <oglUtil/tools/FileReader.hpp> 
  #include <oglUtil/tools/KeyTracker.hpp> 
  #include <oglUtil/tools/MouseTracker.hpp> 
  #include <oglUtil/tools/OgluFunctions.hpp> 

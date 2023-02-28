@@ -3,7 +3,7 @@ if (NOT TARGET oglu)
     set(LICENSE_CONTENT 
 "* MIT License
 * 
-* Copyright (c) 2022 Sebastian Kwaśniak
+* Copyright (c) 2023 Sebastian Kwaśniak
 * 
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the \"Software\"), to deal
@@ -45,9 +45,9 @@ ${OGL_UTIL_INCLUDE_TOOLS_FILE_CONTENT}
 ## Drawables
     file(GLOB_RECURSE OGL_UTIL_INCLUDE_DRAWABLES_FILES "${CMAKE_CURRENT_LIST_DIR}/../include/oglUtil/drawables/*.hpp")
     set(OGL_UTIL_INCLUDE_DRAWABLES_FILE_CONTENT "")
-    foreach (TOOL_FILE ${OGL_UTIL_INCLUDE_DRAWABLES_FILES})
-        file(RELATIVE_PATH TOOL_FILE_INCLUDE "${CMAKE_CURRENT_LIST_DIR}/../include/" ${TOOL_FILE})
-        set(OGL_UTIL_INCLUDE_DRAWABLES_FILE_CONTENT "${OGL_UTIL_INCLUDE_DRAWABLES_FILE_CONTENT} #include <${TOOL_FILE_INCLUDE}> \n")
+    foreach (DRAWABLE_FILE ${OGL_UTIL_INCLUDE_DRAWABLES_FILES})
+        file(RELATIVE_PATH DRAWABLE_FILE_INCLUDE "${CMAKE_CURRENT_LIST_DIR}/../include/" ${DRAWABLE_FILE})
+        set(OGL_UTIL_INCLUDE_DRAWABLES_FILE_CONTENT "${OGL_UTIL_INCLUDE_DRAWABLES_FILE_CONTENT} #include <${DRAWABLE_FILE_INCLUDE}> \n")
     endforeach()
     file(
         WRITE "${CMAKE_CURRENT_LIST_DIR}/../include/oglUtil/ogluDrawables.hpp"
@@ -59,6 +59,23 @@ ${OGL_UTIL_INCLUDE_DRAWABLES_FILE_CONTENT}
 "
     )
 
+    ## Drawables
+    file(GLOB_RECURSE OGL_UTIL_INCLUDE_DRAWABLE_SYSTEM_FILES "${CMAKE_CURRENT_LIST_DIR}/../include/oglUtil/drawableSystem/*.hpp")
+    set(OGL_UTIL_INCLUDE_DRAWABLE_SYSTEM_FILE_CONTENT "")
+    foreach (DRAWABLE_SYSTEM_FILE ${OGL_UTIL_INCLUDE_DRAWABLE_SYSTEM_FILES})
+        file(RELATIVE_PATH DRAWABLE_SYSTEM_FILE_INCLUDE "${CMAKE_CURRENT_LIST_DIR}/../include/" ${DRAWABLE_SYSTEM_FILE})
+        set(OGL_UTIL_INCLUDE_DRAWABLE_SYSTEM_FILE_CONTENT "${OGL_UTIL_INCLUDE_DRAWABLE_SYSTEM_FILE_CONTENT} #include <${DRAWABLE_SYSTEM_FILE_INCLUDE}> \n")
+    endforeach()
+    file(
+        WRITE "${CMAKE_CURRENT_LIST_DIR}/../include/oglUtil/ogluDrawableSystem.hpp"
+        "/*
+${LICENSE_CONTENT}\n*/\n\n
+#pragma once\n
+// Include drawableSystem
+${OGL_UTIL_INCLUDE_DRAWABLE_SYSTEM_FILE_CONTENT}
+"
+    )
+
     set(
         OGL_UTIL_INCLUDE_FILE_CONTENT
         "/*
@@ -67,6 +84,7 @@ ${LICENSE_CONTENT}\n*/\n\n
 // Include all utilities
 ${OGL_UTIL_INCLUDE_TOOLS_FILE_CONTENT}
 ${OGL_UTIL_INCLUDE_DRAWABLES_FILE_CONTENT}
+${OGL_UTIL_INCLUDE_DRAWABLE_SYSTEM_FILE_CONTENT}
 "
     )
     file(

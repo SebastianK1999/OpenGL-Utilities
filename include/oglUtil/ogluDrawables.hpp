@@ -1,7 +1,7 @@
 /*
 * MIT License
 * 
-* Copyright (c) 2022 Sebastian Kwaśniak
+* Copyright (c) 2023 Sebastian Kwaśniak
 * 
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -27,6 +27,7 @@
 
 // Include drawables
  #include <oglUtil/drawables/Cube.hpp> 
+ #include <oglUtil/drawables/Mesh.hpp> 
  #include <oglUtil/drawables/Plane.hpp> 
  #include <oglUtil/drawables/Sphere.hpp> 
 

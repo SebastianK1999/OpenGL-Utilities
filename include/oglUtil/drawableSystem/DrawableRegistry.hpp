@@ -29,6 +29,7 @@
 #include <memory>
 #include <string>
 
+#include "oglUtil/drawableSystem/ShaderCollection.hpp"
 #include "oglUtil/drawableSystem/RegisteredDrawable.hpp"
 
 namespace oglu
@@ -41,11 +42,15 @@ namespace oglu
         static std::shared_ptr<oglu::RegisteredDrawable> registerDrawable
         (
             const std::string& key,
-            const std::vector<glm::vec3>& vertexBuffer,
-            const std::vector<glm::vec4>& vertexColorBuffer,
-            const std::vector<glm::vec3>& normalBuffer,
-            const std::string& vertexShader,
-            const std::string& fragmentShader
+            const std::vector<glm::vec3> vertexBuffer,
+            const std::vector<glm::vec4> vertexColorBuffer,
+            const std::vector<glm::vec3> normalBuffer,
+            const std::vector<glm::vec2> uvBuffer,
+            const std::vector<unsigned char> textureData,
+            const unsigned int textureWidth,
+            const unsigned int textureHeight,
+            const oglu::VertexShader& vertexShaderCode,
+            const oglu::FragmentShader& fragmentShaderCode
         );
         static void drawInstances(const std::string& key, const glm::mat4& MVP, const glm::vec3& light);
     private:

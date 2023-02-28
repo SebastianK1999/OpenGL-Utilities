@@ -1,7 +1,7 @@
 /*
 * MIT License
 * 
-* Copyright (c) 2022 Sebastian Kwaśniak
+* Copyright (c) 2023 Sebastian Kwaśniak
 * 
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -25,12 +25,33 @@
 
 #pragma once
 
-#include "oglUtil/drawableSystem/Drawable.hpp"
+#include <memory>
+
+#include <GL/glew.h>
+#include <glm/glm.hpp>
+
+#include "oglUtil/drawableSystem/DrawableInstance.hpp"
+#include "oglUtil/drawableSystem/DrawableInstancePointers.hpp"
+#include "oglUtil/drawableSystem/RegisteredDrawable.hpp"
 
 namespace oglu
 {
-    class Plane : public virtual oglu::Drawable
+    class Plane : public oglu::DrawableInstance
     {
+    public:
+        static constexpr char key[] = "_oglu::Plane";
+        static void drawInstances(const glm::mat4& MVP, const glm::vec3& light);
+        // static draw(const glm::mat4& MVP, const glm::vec3& light);
+        oglu::RegisteredDrawable& getRegistry() const noexcept override;
+        Plane();
+        Plane(const Plane& other)             = default;
+        Plane(Plane&& other)                  = default;
+        Plane& operator=(const Plane& other)  = default;
+        Plane& operator=(Plane&& other)       = default;
+        virtual ~Plane()                      = default;
+
+    private:
+        static std::shared_ptr<oglu::RegisteredDrawable> registryPointer;
 
     };
 }

@@ -1,7 +1,7 @@
 /*
 * MIT License
 * 
-* Copyright (c) 2022 Sebastian Kwaśniak
+* Copyright (c) 2023 Sebastian Kwaśniak
 * 
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -57,9 +57,24 @@ namespace oglu
         GLuint vboId;       // Vertex Buffer Objects
         GLuint eboId;       // Element Buffer Objects
         GLuint programId;
-        int compileShaders(const char*const vs, const char*const fs, const char*const gs=NULL);
-        void bindBuffers() const;
+        GLuint shaderId;
+        GLuint textureId;
+        void compileShaders
+        (
+            const char*const vs,
+            const char*const fs,
+            const char*const gs=NULL
+        );
+        void compileTexture 
+        (
+            const std::vector<unsigned char>& textureData,
+            const unsigned int width,
+            const unsigned int height
+        );
+        void bindTexture() const;
         void bindProgram() const;
+        void bindBuffers() const;
+        void removeProgram() const;
         template <glm::length_t L,typename T, glm::qualifier Q>
         void setInstancesDataArray(const std::vector<glm::vec<L,T,Q>>& instancesDataArray, const unsigned int layoutAttribute);
         template <glm::length_t L,typename T, glm::qualifier Q>
@@ -67,8 +82,18 @@ namespace oglu
         GLuint getProgramId() const;
     
     private:
-        int compileShaders(const GLuint v, const GLuint f, const GLuint g=0);
-        GLint compileLink(const GLuint v, const char*const which, int prog=0) const;
+        GLuint compileShaders
+        (
+            const GLuint v,
+            const GLuint f,
+            const GLuint g=0
+        );
+        GLint compileLink
+        (
+            const GLuint v,
+            const char*const which,
+            int prog=0
+        ) const;
 
     };
 }

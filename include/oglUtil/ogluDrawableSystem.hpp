@@ -25,22 +25,13 @@
 
 #pragma once
 
-#include <string>
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
+// Include drawableSystem
+ #include <oglUtil/drawableSystem/Drawable.hpp> 
+ #include <oglUtil/drawableSystem/DrawableBase.hpp> 
+ #include <oglUtil/drawableSystem/DrawableInstance.hpp> 
+ #include <oglUtil/drawableSystem/DrawableInstancePointers.hpp> 
+ #include <oglUtil/drawableSystem/DrawableRegistry.hpp> 
+ #include <oglUtil/drawableSystem/RegisteredDrawable.hpp> 
+ #include <oglUtil/drawableSystem/ShaderCollection.hpp> 
+ #include <oglUtil/drawableSystem/ShaderLayoutEnums.hpp> 
 
-namespace oglu
-{
-    bool setupOglu();
-    bool setupGlfw();
-    bool setupGlew(const bool experimental = false);
-    void printErrors(const std::string& comment);
-    void printErrorsDbg(const std::string& comment);
-    void logErrors(const std::string& file_path, const std::string& comment);
-    void logErrorsDbg(const std::string& file_path, const std::string& comment);
-    void callbackResize(GLFWwindow* window, int width, int height);
-    void callbackKey(GLFWwindow* window, int key, int scancode, int action, int mods);
-    void callbackMouseButton(GLFWwindow* window, int button, int action, int mods);
-    void callbackScroll(GLFWwindow* window, double xp, double yp);
-    void callbackMousePos(GLFWwindow* window, double xp, double yp);
-}
