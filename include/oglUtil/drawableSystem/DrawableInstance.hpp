@@ -38,21 +38,22 @@ namespace oglu
     class DrawableInstance
     {
     public:
-        glm::vec3& getPosition();
-        glm::vec3& getScale();
-        glm::vec3& getRotation();
-        glm::vec4& getColor();
+        glm::vec3& getPosition() const noexcept;
+        glm::vec3& getScale() const noexcept;
+        glm::vec3& getRotation() const noexcept;
+        glm::vec4& getColor() const noexcept;
         // virtual oglu::RegisteredDrawable getInstance() const noexcept   = 0;
+        DrawableInstance();
+        DrawableInstance(const DrawableInstance& other);
+        DrawableInstance(DrawableInstance&& other);
+        DrawableInstance& operator=(const DrawableInstance& other);
+        DrawableInstance& operator=(DrawableInstance&& other);
+        virtual ~DrawableInstance();
         virtual oglu::RegisteredDrawable& getRegistry() const noexcept  = 0;
-        DrawableInstance()                                              = default;
-        DrawableInstance(const DrawableInstance& other)                 = default;
-        DrawableInstance(DrawableInstance&& other)                      = default;
-        DrawableInstance& operator=(const DrawableInstance& other)      = default;
-        DrawableInstance& operator=(DrawableInstance&& other)           = default;
-        virtual ~DrawableInstance()                                     = default;
     
     protected:
-        std::shared_ptr<oglu::DrawableInstancePointers> instancePointer;
+        std::shared_ptr<oglu::RegisteredDrawable> registryPointer;
+        std::shared_ptr<oglu::DrawableInstancePointers> instancePointer; // TODO vector of drawInstPrt inside of registeredDrawable, so you dont need to update all pointes, only the instancePointers (the smart pointer)
 
     };
 }

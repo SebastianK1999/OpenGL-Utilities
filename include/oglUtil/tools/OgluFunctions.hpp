@@ -43,4 +43,5 @@ namespace oglu
     void callbackMouseButton(GLFWwindow* window, int button, int action, int mods);
     void callbackScroll(GLFWwindow* window, double xp, double yp);
     void callbackMousePos(GLFWwindow* window, double xp, double yp);
+    void callbackWindowClose(GLFWwindow* window);
 }

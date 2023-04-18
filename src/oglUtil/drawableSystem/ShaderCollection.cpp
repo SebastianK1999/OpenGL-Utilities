@@ -63,8 +63,8 @@ std::string()
         float sinX = sin(rotations.x);
         float cosY = cos(rotations.y);
         float sinY = sin(rotations.y);
-        float cosZ = cos(rotations.z);
-        float sinZ = sin(rotations.z);
+        float cosZ = cos(-rotations.z);
+        float sinZ = sin(-rotations.z);
         
         mat3 rotationMatrix = mat3(
             cosY * cosZ,

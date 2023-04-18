@@ -51,6 +51,8 @@ namespace oglu
         void setFullScreen(const bool fullscreen, const bool fullscreenLastMonitor = false);
         void switchFullScreen(const bool fullscreenLastMonitor = false);
         void destroy();
+        void hide();
+        void show();
         GLFWwindow* getGlfwWindowPtr() const;
         
         virtual void mainLoop();
@@ -64,7 +66,7 @@ namespace oglu
 		virtual void mousePosCallback(const double x, const double y );
 		virtual void mouseButtonCallback(const int button, const int action,const int mods );
 		virtual void scrollCallback(const double x, const double y );
-
+        virtual void windowCloseCallback();
     private:
         GLFWwindow* glfwWindowPtr;
         std::array<int, 2> windowedModePosition;

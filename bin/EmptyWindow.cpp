@@ -17,14 +17,13 @@ public:
     void drawFunction() override;
 };
 
-MainWindow::~MainWindow(){
-
+MainWindow::~MainWindow()
+{
 }
 
 MainWindow::MainWindow(const int _width, const int _height, const std::string& _name) 
 : oglu::Window(_width, _height, _name, false)
 {
-
 }
 
 void MainWindow::mainFunction(){

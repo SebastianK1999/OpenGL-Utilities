@@ -27,6 +27,15 @@
 
 #include "oglUtil/drawableSystem/DrawableInstancePointers.hpp"
 
+
+void oglu::DrawableInstancePointers::copyValues(const DrawableInstancePointers& other)
+{
+    (*positionPointer) = *(other.positionPointer);
+    (*scalePointer) = *(other.scalePointer);
+    (*rotationPointer) = *(other.rotationPointer);
+    (*colorPointer) = *(other.colorPointer);
+}
+
 oglu::DrawableInstancePointers::DrawableInstancePointers(
     glm::vec3* _positionPointer,
     glm::vec3* _scalePointer,

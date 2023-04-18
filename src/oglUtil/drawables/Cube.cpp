@@ -135,11 +135,11 @@ static const std::vector<glm::vec3> gs_NormalBuffer = {
 
 };
 
-std::shared_ptr<oglu::RegisteredDrawable> oglu::Cube::registryPointer = nullptr;
+std::shared_ptr<oglu::RegisteredDrawable> oglu::Cube::staticRegistryPointer = nullptr;
 
 void oglu::Cube::drawInstances(const glm::mat4& MVP, const glm::vec3& light)
 {
-    registryPointer->drawInstances(MVP, light);
+    staticRegistryPointer->drawInstances(MVP, light);
 }
 
 oglu::RegisteredDrawable& oglu::Cube::getRegistry() const noexcept 
@@ -148,10 +148,11 @@ oglu::RegisteredDrawable& oglu::Cube::getRegistry() const noexcept
 }
 
 oglu::Cube::Cube()
+    : oglu::DrawableInstance()
 {
-    if(registryPointer == nullptr)
+    if(staticRegistryPointer == nullptr)
     {
-        registryPointer = oglu::DrawableRegistry::registerDrawable
+        staticRegistryPointer = oglu::DrawableRegistry::registerDrawable
         (
             oglu::Cube::key,
             gs_VertexBuffer,
@@ -165,6 +166,6 @@ oglu::Cube::Cube()
             oglu::ShaderCollection::basicFragmentShader
         );
     }
-    instancePointer = registryPointer->addInstance();
+    registryPointer = staticRegistryPointer;
+    instancePointer = staticRegistryPointer->addInstance();
 }
-

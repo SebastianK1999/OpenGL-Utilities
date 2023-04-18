@@ -23,6 +23,7 @@
 */
 
 
+#include <iostream>
 #include <utility>
 
 #include "oglUtil/drawableSystem/DrawableRegistry.hpp"
@@ -76,4 +77,12 @@ std::shared_ptr<oglu::RegisteredDrawable> oglu::DrawableRegistry::registerDrawab
 void oglu::DrawableRegistry::drawInstances(const std::string& key, const glm::mat4& MVP, const glm::vec3& light)
 {
     getRegistry(key)->drawInstances(MVP, light);
+}
+
+void oglu::DrawableRegistry::reinitialize()
+{
+    for (auto drawableIterator = registeredDrawables.begin(); drawableIterator != registeredDrawables.end(); drawableIterator = std::next(drawableIterator))
+    {
+        drawableIterator->second->reinitialize();
+    }
 }

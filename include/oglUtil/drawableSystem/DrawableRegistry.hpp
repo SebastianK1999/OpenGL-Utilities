@@ -53,6 +53,7 @@ namespace oglu
             const oglu::FragmentShader& fragmentShaderCode
         );
         static void drawInstances(const std::string& key, const glm::mat4& MVP, const glm::vec3& light);
+        static void reinitialize();
     private:
         static std::map<std::string, std::shared_ptr<oglu::RegisteredDrawable>> registeredDrawables;
         DrawableRegistry() = delete;

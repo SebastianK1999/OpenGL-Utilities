@@ -59,10 +59,11 @@ oglu::Window& oglu::Window::operator=(Window&& other){
 }
 
 oglu::Window::~Window(){
-   glfwDestroyWindow(glfwWindowPtr);
+    glfwDestroyWindow(glfwWindowPtr);
 }
 
-oglu::Window::Window(const int width, const int height, const std::string& name, const bool fullscreen, const bool fullscreenLastMonitor, const bool makeContextCurrent){
+oglu::Window::Window(const int width, const int height, const std::string& name, const bool fullscreen, const bool fullscreenLastMonitor, const bool makeContextCurrent)
+{
     if (fullscreen) {
         int monitorCount;
         GLFWmonitor** monitors= glfwGetMonitors(&monitorCount);
@@ -83,6 +84,7 @@ oglu::Window::Window(const int width, const int height, const std::string& name,
     glfwSetCursorPosCallback(glfwWindowPtr, oglu::callbackMousePos );
     glfwSetMouseButtonCallback(glfwWindowPtr, oglu::callbackMouseButton );
     glfwSetScrollCallback(glfwWindowPtr, oglu::callbackScroll );
+    // glfwSetWindowCloseCallback(glfwWindowPtr, oglu::callbackWindowClose );
 
     glfwGetWindowPos(  glfwWindowPtr, &windowedModePosition[0],  &windowedModePosition[1] );
     glfwSwapInterval(1);  // 60 fps ?
@@ -145,6 +147,20 @@ void oglu::Window::destroy(){
     }
 }
 
+void oglu::Window::hide()
+{
+    // glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
+    glfwHideWindow(getGlfwWindowPtr());
+}
+
+void oglu::Window::show()
+{
+    // glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);
+    glfwShowWindow(getGlfwWindowPtr());
+    glfwMakeContextCurrent(glfwWindowPtr);
+    oglu::setupGlew(false);
+}
+
 GLFWwindow* oglu::Window::getGlfwWindowPtr() const {
     return glfwWindowPtr;
 }
@@ -152,7 +168,12 @@ GLFWwindow* oglu::Window::getGlfwWindowPtr() const {
 void oglu::Window::mainLoop(){
     do {
         renderWindow();
-    } while( glfwWindowShouldClose(getGlfwWindowPtr()) == 0 && glfwWindowPtr != nullptr);
+    } while
+    (
+        glfwWindowShouldClose(getGlfwWindowPtr()) == 0
+        && glfwWindowPtr != nullptr 
+        && glfwGetWindowAttrib(getGlfwWindowPtr(), GLFW_VISIBLE)
+    );
 }
 
 //.void oglu::Window::mainLoopThread();
@@ -201,4 +222,9 @@ void oglu::Window::mouseButtonCallback( const int button, const int action, cons
 
 void oglu::Window::scrollCallback( const double x, const double y ){
 
+}
+
+void oglu::Window::windowCloseCallback()
+{
+    
 }

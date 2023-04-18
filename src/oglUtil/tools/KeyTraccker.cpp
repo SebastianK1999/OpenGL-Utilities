@@ -58,7 +58,7 @@ oglu::KeyTracker::KeyData::~KeyData() noexcept {
 
 }
 
-oglu::KeyTracker::KeyData::KeyData(const int key, const EKeyState state, const std::chrono::_V2::system_clock::time_point stateChangeTime) noexcept:
+oglu::KeyTracker::KeyData::KeyData(const int key, const EKeyState state, const std::chrono::steady_clock::time_point stateChangeTime) noexcept:
     key(key),
     state(state),
     stateChangeTime(stateChangeTime)
@@ -117,7 +117,7 @@ void oglu::KeyTracker::update(GLFWwindow* window,const KeyBundle& keyBundle){
 void oglu::KeyTracker::addKey(const int key) noexcept {
     std::vector<KeyData>::const_iterator keyIterator = std::find_if(trackedKeys.begin(), trackedKeys.end(), [&key](const KeyData& ki){return (ki.key == key);});
     if(keyIterator == trackedKeys.end()){
-        trackedKeys.push_back(KeyData(key, EKeyState_released, std::chrono::high_resolution_clock::now()));
+        trackedKeys.push_back(KeyData(key, EKeyState_released, std::chrono::steady_clock::now()));
     }
 }
 
@@ -253,7 +253,7 @@ bool oglu::KeyTracker::isJustReleased(const KeyBundle& keyBundle) const {
 int oglu::KeyTracker::getTime(const int key) const {
     std::vector<KeyData>::const_iterator keyIterator = std::find_if(trackedKeys.begin(), trackedKeys.end(), [&key](const KeyData& ki){return (ki.key == key);});
     if(keyIterator != trackedKeys.end()){
-        return std::chrono::duration<double, std::milli>(std::chrono::high_resolution_clock::now() - keyIterator->stateChangeTime).count();
+        return std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - keyIterator->stateChangeTime).count();
     }
     return -1;
 }
@@ -270,7 +270,7 @@ void oglu::KeyTracker::update(GLFWwindow* window, KeyData& keyData){
         case EKeyState_released:
             if(glfwGetKey( window, keyData.key ) == GLFW_PRESS){
                 keyData.state = EKeyState_isJustPressed;
-                keyData.stateChangeTime = std::chrono::high_resolution_clock::now();
+                keyData.stateChangeTime = std::chrono::steady_clock::now();
             }
             break;
         case EKeyState_isJustPressed:
@@ -279,13 +279,13 @@ void oglu::KeyTracker::update(GLFWwindow* window, KeyData& keyData){
             }
             else {
                 keyData.state = EKeyState_isJustReleased;
-                keyData.stateChangeTime = std::chrono::high_resolution_clock::now();
+                keyData.stateChangeTime = std::chrono::steady_clock::now();
             }
             break;
         case EKeyState_pressed:
             if(! (glfwGetKey( window, keyData.key ) == GLFW_PRESS)){
                 keyData.state = EKeyState_isJustReleased;
-                keyData.stateChangeTime = std::chrono::high_resolution_clock::now();
+                keyData.stateChangeTime = std::chrono::steady_clock::now();
             }
             break;
         case EKeyState_isJustReleased:
@@ -294,7 +294,7 @@ void oglu::KeyTracker::update(GLFWwindow* window, KeyData& keyData){
             }
             else {
                 keyData.state = EKeyState_isJustPressed;
-                keyData.stateChangeTime = std::chrono::high_resolution_clock::now();
+                keyData.stateChangeTime = std::chrono::steady_clock::now();
             }
             break;
         }

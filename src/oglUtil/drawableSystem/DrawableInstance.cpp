@@ -22,25 +22,68 @@
 * SOFTWARE.
 */
 
-
 #include "oglUtil/drawableSystem/DrawableInstance.hpp"
 
-glm::vec3& oglu::DrawableInstance::getPosition()
+glm::vec3& oglu::DrawableInstance::getPosition() const noexcept
 {
     return *(instancePointer->positionPointer);
 }
 
-glm::vec3& oglu::DrawableInstance::getScale()
+glm::vec3& oglu::DrawableInstance::getScale() const noexcept
 {
     return *(instancePointer->scalePointer);
 }
 
-glm::vec3& oglu::DrawableInstance::getRotation()
+glm::vec3& oglu::DrawableInstance::getRotation() const noexcept
 {
     return *(instancePointer->rotationPointer);
 }
 
-glm::vec4& oglu::DrawableInstance::getColor()
+glm::vec4& oglu::DrawableInstance::getColor() const noexcept
 {
     return *(instancePointer->colorPointer);
+}
+
+oglu::DrawableInstance::DrawableInstance()
+    : registryPointer(nullptr)
+    , instancePointer()
+{
+}
+
+oglu::DrawableInstance::DrawableInstance(const DrawableInstance& other)
+    : registryPointer(other.registryPointer)
+    , instancePointer(other.registryPointer->addInstance())
+{
+        instancePointer->copyValues(*(other.instancePointer));
+}
+
+oglu::DrawableInstance::DrawableInstance(DrawableInstance&& other)
+    : registryPointer(std::move(other.registryPointer))
+    , instancePointer(std::move(other.instancePointer))
+{
+}
+
+oglu::DrawableInstance& oglu::DrawableInstance::operator=(const DrawableInstance& other)
+{
+    if(this != &other){
+        registryPointer = other.registryPointer;
+        instancePointer = other.registryPointer->addInstance();
+        instancePointer->copyValues(*(other.instancePointer));
+    }
+    return *this;
+}
+
+oglu::DrawableInstance& oglu::DrawableInstance::operator=(DrawableInstance&& other)
+{
+    registryPointer = std::move(other.registryPointer);
+    instancePointer = std::move(other.instancePointer);
+    return *this;
+}
+
+oglu::DrawableInstance::~DrawableInstance()
+{
+    if(instancePointer.use_count() == 2)  // 2 located in this and registryPointer.instances
+    {
+        registryPointer->deleteInstance(instancePointer);
+    }
 }

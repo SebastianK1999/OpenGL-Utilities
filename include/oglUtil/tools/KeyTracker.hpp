@@ -55,11 +55,11 @@ namespace oglu
             KeyData& operator=(const KeyData& other) noexcept;
             KeyData& operator=(KeyData&& other) noexcept;
             virtual ~KeyData() noexcept;
-            KeyData(const int key, const EKeyState state, const std::chrono::_V2::system_clock::time_point stateChangeTime) noexcept;
+            KeyData(const int key, const EKeyState state, const std::chrono::steady_clock::time_point stateChangeTime) noexcept;
             
             int key;
             EKeyState state;
-            std::chrono::_V2::system_clock::time_point stateChangeTime;
+            std::chrono::steady_clock::time_point stateChangeTime;
         };
 
     public:

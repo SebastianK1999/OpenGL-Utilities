@@ -26,6 +26,7 @@
 #include <utility>
 #include <cstring>
 #include <array>
+#include <iostream>
 
 #include "whereami.h"
 
@@ -85,6 +86,10 @@ oglu::RegisteredDrawable& oglu::Mesh::getRegistry(const std::string& key)
 
 void oglu::Mesh::drawInstances(const std::filesystem::path& meshDirectory, const glm::mat4& MVP, const glm::vec3& light)
 {
+    if(!oglu::DrawableRegistry::hasRegistry(oglu::Mesh::createKey(meshDirectory)))
+    {
+        return;
+    }
     oglu::DrawableRegistry::getRegistry(oglu::Mesh::createKey(meshDirectory))->drawInstances(MVP, light);
 }
 

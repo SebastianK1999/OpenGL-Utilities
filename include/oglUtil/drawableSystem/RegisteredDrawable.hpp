@@ -43,12 +43,16 @@ namespace oglu
     class RegisteredDrawable : public oglu::DrawableBase
     {
     public:
-        static std::string vertexShaderFileName;
-        static std::string fragmentShaderFileName;
+        static const std::string vertexShaderFileName;
+        static const std::string fragmentShaderFileName;
 
         const std::string key;
         std::shared_ptr<oglu::DrawableInstancePointers> addInstance();
+        size_t size() const noexcept;
         void reserve(const unsigned int numberOfNewInstances);
+        void deleteInstance(const std::shared_ptr<oglu::DrawableInstancePointers> instancePointers);
+        void resetPointers();
+        void reinitialize();
         void drawInstances(const glm::mat4& MVP, const glm::vec3& light);
         void loadShaders(const std::filesystem::path& shadersDirectory);
         void loadShaders
@@ -78,10 +82,8 @@ namespace oglu
         const std::vector<unsigned char> textureData;
         const unsigned int textureWidth;
         const unsigned int textureHeight;
-        const std::string vertexShaderCode;
-        const std::string fragmentShaderCode;
-        GLuint shader;
-        GLuint texture;
+        oglu::VertexShader vertexShaderCode;
+        oglu::FragmentShader fragmentShaderCode;
         std::vector<std::shared_ptr <oglu::DrawableInstancePointers>> instances;
         std::vector<glm::vec3> instancePositions;
         std::vector<glm::vec3> instanceScales;

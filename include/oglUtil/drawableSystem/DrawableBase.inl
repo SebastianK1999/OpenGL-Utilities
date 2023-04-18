@@ -31,13 +31,14 @@
 template <glm::length_t L,typename T, glm::qualifier Q>
 void oglu::DrawableBase::setInstancesDataArray(const std::vector<glm::vec<L,T,Q>>& instancesDataArray, const unsigned int layoutAttribute)
 {
+    const unsigned int instancesCount = (instancesDataArray.size() < oglu::DrawableBase::limitDrawables ? instancesDataArray.size() : oglu::DrawableBase::limitDrawables);
     GLuint arrayId;
     glGenBuffers(1, &arrayId);
     glBindBuffer(GL_ARRAY_BUFFER, arrayId);
     glBufferData
     (
         GL_ARRAY_BUFFER,
-        sizeof(T) * L * instancesDataArray.size(),
+        sizeof(T) * L * instancesCount,
         instancesDataArray.data(),
         GL_STATIC_DRAW
     );

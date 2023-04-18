@@ -130,3 +130,11 @@ void oglu::callbackScroll(GLFWwindow* window, double x, double y) {
 		ogluWindowPtr->scrollCallback( x, y );
    	}
 }
+
+void oglu::callbackWindowClose(GLFWwindow* window) {
+   	void* userWindowPtr = glfwGetWindowUserPointer( window );
+   	oglu::Window *ogluWindowPtr = static_cast<oglu::Window*>( userWindowPtr );
+   	if ( ogluWindowPtr ){
+		ogluWindowPtr->windowCloseCallback();
+   	}
+}

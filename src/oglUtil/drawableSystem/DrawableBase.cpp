@@ -33,11 +33,13 @@
 //===========================================================================
 
 
-#include "oglUtil/drawableSystem/DrawableBase.hpp"
 #include <algorithm>
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include "oglUtil/drawableSystem/DrawableBase.hpp"
+
+unsigned int oglu::DrawableBase::limitDrawables = -1; 
 
 oglu::DrawableBase::DrawableBase(const DrawableBase& other) noexcept
 : vaoId(other.vaoId)

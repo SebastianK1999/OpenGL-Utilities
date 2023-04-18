@@ -41,6 +41,7 @@ namespace oglu
     {
     public:
         static constexpr char key[] = "_oglu::Cube";
+        static std::shared_ptr<oglu::RegisteredDrawable> staticRegistryPointer;
         static void drawInstances(const glm::mat4& MVP, const glm::vec3& light);
         // static draw(const glm::mat4& MVP, const glm::vec3& light);
         oglu::RegisteredDrawable& getRegistry() const noexcept override;
@@ -52,7 +53,6 @@ namespace oglu
         virtual ~Cube()                     = default;
 
     private:
-        static std::shared_ptr<oglu::RegisteredDrawable> registryPointer;
 
     };
 }

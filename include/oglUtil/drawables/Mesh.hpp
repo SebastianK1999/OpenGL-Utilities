@@ -75,7 +75,5 @@ namespace oglu
             unsigned int& width,
             unsigned int& height
         );
-        std::shared_ptr<oglu::RegisteredDrawable> registryPointer;
-
     };
 }

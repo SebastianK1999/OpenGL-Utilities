@@ -39,6 +39,7 @@ namespace oglu
         glm::vec3* scalePointer;
         glm::vec3* rotationPointer;
         glm::vec4* colorPointer;
+        void copyValues(const DrawableInstancePointers& other);
         DrawableInstancePointers
         (
             glm::vec3* positionPointer,

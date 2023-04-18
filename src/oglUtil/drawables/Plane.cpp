@@ -31,13 +31,13 @@
 #include "oglUtil/drawables/Plane.hpp"
 
 static const std::vector<glm::vec3> gs_VertexBuffer = { 
-    glm::vec3( 0.5f, 0.5f, 0.5f),
-    glm::vec3(-0.5f, 0.5f, 0.5f),
-    glm::vec3( 0.5f,-0.5f, 0.5f),
+    glm::vec3( 0.5f, 0.5f, 0.0f),
+    glm::vec3(-0.5f, 0.5f, 0.0f),
+    glm::vec3( 0.5f,-0.5f, 0.0f),
 
-    glm::vec3(-0.5f,-0.5f, 0.5f),
-    glm::vec3( 0.5f,-0.5f, 0.5f),
-    glm::vec3(-0.5f, 0.5f, 0.5f),
+    glm::vec3(-0.5f,-0.5f, 0.0f),
+    glm::vec3( 0.5f,-0.5f, 0.0f),
+    glm::vec3(-0.5f, 0.5f, 0.0f),
 };
 
 static const std::vector<glm::vec3> gs_NormalBuffer = { 
@@ -50,11 +50,11 @@ static const std::vector<glm::vec3> gs_NormalBuffer = {
     glm::vec3(0.0f, 0.0f, 1.0f),
 };
 
-std::shared_ptr<oglu::RegisteredDrawable> oglu::Plane::registryPointer = nullptr;
+std::shared_ptr<oglu::RegisteredDrawable> oglu::Plane::staticRegistryPointer = nullptr;
 
 void oglu::Plane::drawInstances(const glm::mat4& MVP, const glm::vec3& light)
 {
-    registryPointer->drawInstances(MVP, light);
+    staticRegistryPointer->drawInstances(MVP, light);
 }
 
 oglu::RegisteredDrawable& oglu::Plane::getRegistry() const noexcept 
@@ -64,9 +64,9 @@ oglu::RegisteredDrawable& oglu::Plane::getRegistry() const noexcept
 
 oglu::Plane::Plane()
 {
-    if(registryPointer == nullptr)
+    if(staticRegistryPointer == nullptr)
     {
-        registryPointer = oglu::DrawableRegistry::registerDrawable
+        staticRegistryPointer = oglu::DrawableRegistry::registerDrawable
         (
             oglu::Plane::key,
             gs_VertexBuffer,
@@ -80,6 +80,7 @@ oglu::Plane::Plane()
             oglu::ShaderCollection::basicFragmentShader
         );
     }
-    instancePointer = registryPointer->addInstance();
+    registryPointer = staticRegistryPointer;
+    instancePointer = staticRegistryPointer->addInstance();
 }
 

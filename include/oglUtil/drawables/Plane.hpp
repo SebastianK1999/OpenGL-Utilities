@@ -51,7 +51,7 @@ namespace oglu
         virtual ~Plane()                      = default;
 
     private:
-        static std::shared_ptr<oglu::RegisteredDrawable> registryPointer;
+        static std::shared_ptr<oglu::RegisteredDrawable> staticRegistryPointer;
 
     };
 }

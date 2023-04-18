@@ -30,12 +30,12 @@
 
 #include "oglUtil/drawables/Sphere.hpp"
 
-std::shared_ptr<oglu::RegisteredDrawable> oglu::Sphere::registryPointer = nullptr;
+std::shared_ptr<oglu::RegisteredDrawable> oglu::Sphere::staticRegistryPointer = nullptr;
 unsigned int oglu::Sphere::levelOfDetail = 10;
 
 void oglu::Sphere::drawInstances(const glm::mat4& MVP, const glm::vec3& light)
 {
-    registryPointer->drawInstances(MVP, light);
+    staticRegistryPointer->drawInstances(MVP, light);
 }
 
 oglu::RegisteredDrawable& oglu::Sphere::getRegistry() const noexcept 
@@ -45,11 +45,11 @@ oglu::RegisteredDrawable& oglu::Sphere::getRegistry() const noexcept
 
 oglu::Sphere::Sphere()
 {
-    if(registryPointer == nullptr)
+    if(staticRegistryPointer == nullptr)
     {
         std::vector<glm::vec3> vertexBuffer = oglu::Sphere::generateMesh();
         std::vector<glm::vec3> normalBuffer = oglu::Sphere::generateNormals(vertexBuffer);
-        registryPointer = oglu::DrawableRegistry::registerDrawable
+        staticRegistryPointer = oglu::DrawableRegistry::registerDrawable
         (
             oglu::Sphere::key,
             vertexBuffer,
@@ -63,7 +63,8 @@ oglu::Sphere::Sphere()
             oglu::ShaderCollection::basicFragmentShader
         );
     }
-    instancePointer = registryPointer->addInstance();
+    registryPointer = staticRegistryPointer;
+    instancePointer = staticRegistryPointer->addInstance();
 }
 
 const std::vector<glm::vec3> oglu::Sphere::generateMesh()

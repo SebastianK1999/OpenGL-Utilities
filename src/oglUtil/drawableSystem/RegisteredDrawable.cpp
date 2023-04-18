@@ -24,6 +24,7 @@
 
 #include <utility>
 #include <iostream>
+#include <cmath>
 
 #include "oglUtil/tools/OgluFunctions.hpp"
 #include "oglUtil/tools/FileReader.hpp"
@@ -31,12 +32,13 @@
 
 #include "oglUtil/drawableSystem/RegisteredDrawable.hpp"
 
-std::string oglu::RegisteredDrawable::vertexShaderFileName = "shader.vs";
+const std::string oglu::RegisteredDrawable::vertexShaderFileName = "shader.vs";
 
-std::string oglu::RegisteredDrawable::fragmentShaderFileName = "shader.fs";
+const std::string oglu::RegisteredDrawable::fragmentShaderFileName = "shader.fs";
 
 std::shared_ptr<oglu::DrawableInstancePointers> oglu::RegisteredDrawable::addInstance()
 {
+    bool resetPointersNeeded = instances.size() == instances.capacity();
     instancePositions.emplace_back  (glm::vec3(0.0f,0.0f,0.0f));
     instanceScales.emplace_back     (glm::vec3(1.0f,1.0f,1.0f));
     instanceRotations.emplace_back  (glm::vec3(0.0f,0.0f,0.0f));
@@ -49,16 +51,60 @@ std::shared_ptr<oglu::DrawableInstancePointers> oglu::RegisteredDrawable::addIns
             &instanceColors.back()
         )
     );
+    if(resetPointersNeeded) resetPointers();
     return instances.back();
+}
+
+void oglu::RegisteredDrawable::deleteInstance(const std::shared_ptr<oglu::DrawableInstancePointers> instancePointers)
+{
+    for(unsigned int index = 0; index < instances.size(); index++)
+    {
+        if(instancePointers == instances[index])
+        {
+            instances.erase(std::next(instances.begin(), index));
+            instancePositions.erase(std::next(instancePositions.begin(), index));
+            instanceScales.erase(std::next(instanceScales.begin(), index));
+            instanceRotations.erase(std::next(instanceRotations.begin(), index));
+            instanceColors.erase(std::next(instanceColors.begin(), index));
+            break;
+        }
+    }
+    resetPointers();
+}
+
+void oglu::RegisteredDrawable::resetPointers()
+{
+    for(unsigned int instanceIndex = 0; instanceIndex < instances.size(); instanceIndex++)
+    {
+        instances[instanceIndex]->positionPointer = &instancePositions[instanceIndex];
+        instances[instanceIndex]->scalePointer = &instanceScales[instanceIndex];
+        instances[instanceIndex]->rotationPointer = &instanceRotations[instanceIndex];
+        instances[instanceIndex]->colorPointer = &instanceColors[instanceIndex];
+    }
+}
+
+void oglu::RegisteredDrawable::reinitialize()
+{
+    glGenVertexArrays(1, &(vaoId));
+	bindProgram();
+	setBuffers();
+	setShaders();
+    setTexture();
+}
+
+size_t oglu::RegisteredDrawable::size() const noexcept
+{
+    return instances.size();
 }
 
 void oglu::RegisteredDrawable::reserve(const unsigned int numberOfNewInstances)
 {
-    instancePositions.reserve(instancePositions.capacity() + numberOfNewInstances);
-    instanceScales.reserve(instanceScales.capacity() + numberOfNewInstances);
-    instanceRotations.reserve(instanceRotations.capacity() + numberOfNewInstances);
-    instanceColors.reserve(instanceColors.capacity() + numberOfNewInstances);
-    instances.reserve(instances.capacity() + numberOfNewInstances);
+    instancePositions.reserve(numberOfNewInstances);
+    instanceScales.reserve(numberOfNewInstances);
+    instanceRotations.reserve(numberOfNewInstances);
+    instanceColors.reserve(numberOfNewInstances);
+    instances.reserve(numberOfNewInstances);
+    resetPointers();
 }
 
 oglu::RegisteredDrawable::RegisteredDrawable
@@ -103,12 +149,15 @@ void oglu::RegisteredDrawable::setShaders()
 
 void oglu::RegisteredDrawable::loadShaders(const std::filesystem::path& shadersDirectory)
 {
-    oglu::VertexShader vertexShaderCode = oglu::FileReader::readFileContent(shadersDirectory / oglu::RegisteredDrawable::vertexShaderFileName);
-    oglu::FragmentShader fragmentShaderCode = oglu::FileReader::readFileContent(shadersDirectory / oglu::RegisteredDrawable::fragmentShaderFileName);
+    vertexShaderCode = oglu::ShaderCollection::vertexShaderLayouts
+        + oglu::ShaderCollection::vertexShaderFunctions
+        +  oglu::FileReader::readFileContent(shadersDirectory / oglu::RegisteredDrawable::vertexShaderFileName);
+    fragmentShaderCode = oglu::ShaderCollection::fragmentShaderLayouts 
+        + oglu::FileReader::readFileContent(shadersDirectory / oglu::RegisteredDrawable::fragmentShaderFileName);
     loadShaders
     (
-        oglu::ShaderCollection::vertexShaderLayouts + oglu::ShaderCollection::vertexShaderFunctions + vertexShaderCode,
-        oglu::ShaderCollection::fragmentShaderLayouts + fragmentShaderCode
+        vertexShaderCode,
+        fragmentShaderCode
     );
 }
 
@@ -152,7 +201,9 @@ void oglu::RegisteredDrawable::drawInstances(const glm::mat4& MVP, const glm::ve
     setInstancesDataArray(instanceRotations,oglu::EShaderBufferLayout::rotation);
     setInstancesDataArray(instanceColors,   oglu::EShaderBufferLayout::color);
 
+
     glUniformMatrix4fv(0, 1, GL_FALSE, &MVP[0][0]);
     glUniform3f(1, light[0], light[1], light[2]);
-    glDrawArraysInstanced(GL_TRIANGLES, 0, vertexBuffer.size(), instances.size()); 
+    const unsigned int instancesCount = (instances.size() < oglu::DrawableBase::limitDrawables ? instances.size() : oglu::DrawableBase::limitDrawables);
+    glDrawArraysInstanced(GL_TRIANGLES, 0, vertexBuffer.size(), instancesCount); 
 }

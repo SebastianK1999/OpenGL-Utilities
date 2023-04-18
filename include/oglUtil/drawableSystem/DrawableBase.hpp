@@ -45,6 +45,7 @@ namespace oglu
     class DrawableBase
     {
     public:
+        static unsigned int limitDrawables; 
         DrawableBase(const DrawableBase& other) noexcept;
         DrawableBase(DrawableBase&& other) noexcept;
         DrawableBase& operator=(const DrawableBase& other) noexcept;
