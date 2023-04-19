@@ -61,4 +61,6 @@ set(CMAKE_CXX_STANDARD_LIBRARIES "-lGL")
 add_subdirectory("external") # linking submodules
 add_subdirectory("submodules") # linking submodules
 add_subdirectory("src") # linking sourcefiles
-add_subdirectory("bin") # create executable
+if  (CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+    add_subdirectory("bin") # create executable
+endif()
